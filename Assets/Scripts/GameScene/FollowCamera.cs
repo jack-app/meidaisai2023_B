@@ -10,19 +10,19 @@ public class FollowCamera : MonoBehaviour
     [SerializeField] private float up = 200f;
     [SerializeField] private float orbBack = 100f;
     [SerializeField] private float orbUp = 200f;
-    GravityControl gc;
+    RocketControl rc;
     // Start is called before the first frame update
     void Start()
     {
         obj = GameObject.Find("Rocket");
         mytransform = this.transform;
-        gc = obj.GetComponent<GravityControl>();
+        rc = obj.GetComponent<RocketControl>();
     }
 
     
     void Update()
     {
-        if(gc.InOrbit == false)//軌道の外
+        if(rc.inOrbit == false)//軌道の外
         {
             //パターン1
             //Vector3 centerDirection = obj.transform.position * (-1);//宇宙中心方向のベクトル
@@ -39,9 +39,9 @@ public class FollowCamera : MonoBehaviour
             float angle2 = Vector3.Angle(Direction2 * (-1), Vector3.forward);//カメラ角度の決定
             mytransform.rotation = Quaternion.Euler(5f, angle2, 0.0f);//カメラ角度変更の実行
         }
-        if (gc.InOrbit == true)//軌道の内
+        if (rc.inOrbit == true)//軌道の内
         {
-            Vector3 planetPos = gc.PlanetPos;//惑星の位置
+            Vector3 planetPos = rc.PlanetPos;//惑星の位置
             Vector3 centerDirection = planetPos * (-1);//宇宙中心方向のベクトル
             Vector3 nlzDirection = centerDirection.normalized;//単位ベクトル化
             Vector3 backposition = planetPos + (orbBack * nlzDirection);//カメラの惑星後方位置
