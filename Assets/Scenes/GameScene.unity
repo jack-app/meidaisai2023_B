@@ -193,49 +193,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 9eafec2478441af418574f3e9e971f8d, type: 3}
   m_PrefabInstance: {fileID: 1270416257}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &200922810
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 200922809}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd37f59dbd3cdc74e96871812ad326b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startDash: 10000
-  escapeTime: 1.5
-  maxCharge: 1.3
-  charge: 1.05
-  chargeSpeed: 0.03
-  Air: 1000
-  AirDecrease: 0
-  AirIncrease: 2.1
-  HorizonSpeed: 1
-  escape: 0
-  delta: {x: 0, y: 0, z: 0}
---- !u!114 &200922811
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 200922809}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f176ee8c44841224a83fd93c8bcaea08, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GravityCoefficient: 7000
-  orbitSpeedBounus: 1.05
-  PlanetPos: {x: 0, y: 0, z: 0}
-  speedVector: {x: 0, y: 0, z: 0}
-  InOrbit: 0
-  leftAround: 0
-  rightAround: 0
-  saveVelocity: {x: 0, y: 0, z: 0}
 --- !u!54 &200922813
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -277,11 +234,28 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 200922809}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2ffec9aafd4d1634195fb8843aab2e0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GravityCoefficient: 7000
+  orbitSpeedBounus: 1.05
+  startDash: 3000
+  escapeTime: 1.5
+  maxCharge: 1.3
+  charge: 1.05
+  chargeSpeed: 0.03
+  Air: 1000
+  AirDecrease: 0
+  AirIncrease: 2.1
+  HorizonSpeed: 1
+  inOrbit: 0
+  leftAround: 0
+  rightAround: 0
+  saveVelocity: {x: 0, y: 0, z: 0}
+  PlanetPos: {x: 0, y: 0, z: 0}
+  delta: {x: 0, y: 0, z: 0}
 --- !u!4 &619254139 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 706485091540730033, guid: 7e12d234775695d4792cee72407321d7, type: 3}
