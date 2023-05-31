@@ -21,6 +21,7 @@ public class RocketControl : MonoBehaviour
     public Vector3 saveVelocity; // 速度ベクトルの保存
     public Vector3 PlanetPos; // 惑星の位置
     public Vector3 delta; // ロケットの速度ベクトル
+    public Vector3 NowPosition { get; private set; } // 今のロケットの位置
     private Rigidbody rb;
     private Transform myTransform;
     private GameObject planetObject;
@@ -28,10 +29,10 @@ public class RocketControl : MonoBehaviour
     private bool start = false; // スタートしたかの判定
     private bool escape = false; // 軌道からの離脱中判定
     private Vector3 prePosition; // 1フレーム前のロケットの位置
-    private Vector3 nowPosition; // 今のロケットの位置
     private float orbitalRadius; // 軌道半径
     private float mass = 1; // 惑星の質量
     private float speed; // ロケットの速さ
+    private Vector3 relativeRocketPos;
 
     // Start is called before the first frame update
     void Start()
@@ -43,9 +44,9 @@ public class RocketControl : MonoBehaviour
     //速度ベクトル(delta)の取得
     void GetDeltaPos()
     {
-        nowPosition = myTransform.position;
-        delta = (nowPosition - prePosition) / Time.deltaTime;
-        prePosition = nowPosition;
+        NowPosition = myTransform.position;
+        delta = (NowPosition - prePosition) / Time.deltaTime;
+        prePosition = NowPosition;
     }
 
     void CompleatEscape()
@@ -88,9 +89,9 @@ public class RocketControl : MonoBehaviour
                 charge += chargeSpeed;//スペースを押す間chargeを増加
             }
 
-
             if (Input.GetButtonUp("Jump"))
             {
+                Debug.Log("escape");
                 rb.velocity = forward * escapeSpeed * charge;//正面方向に速度を与える           
                 charge = 1;
                 escape = true;
@@ -117,7 +118,7 @@ public class RocketControl : MonoBehaviour
         var rocketAxis = Vector3.Cross(delta, Vector3.forward).y < 0 ? -1 : 1;
         var normalizedAngle = Mathf.Repeat(-rocketAngle * rocketAxis, 360);
         myTransform.rotation = Quaternion.Euler(0, normalizedAngle, 0);
-        Debug.Log(normalizedAngle);
+        //Debug.Log(normalizedAngle);
     }
 
     void OnTriggerEnter(Collider collider)
@@ -146,7 +147,7 @@ public class RocketControl : MonoBehaviour
                 Vector3 gravityDirection = PlanetPos - myTransform.position;
                 //ロケットと惑星の距離の取得
                 float GravityLength = gravityDirection.magnitude;
-                //Debug.Log(GravityLength);
+                Debug.Log(GravityLength);
                 //単位ベクトルの取得
                 Vector3 GravityNlz = gravityDirection.normalized;
                 //重力の計算
@@ -155,7 +156,7 @@ public class RocketControl : MonoBehaviour
                 if (GravityLength < orbitalRadius)
                 {
                     //内側の場合
-                    Debug.Log("Inside");
+                    //Debug.Log("Inside");
                     //速度ベクトルと惑星に向かう方向のベクトルのなす角                
                     var axis = Vector3.Cross(gravityDirection, delta).y < 0 ? -1 : 1;//外積計算(なす角を-180から180にするのに必要)
                     var angle = Vector3.Angle(gravityDirection, delta) * (axis);//なす角
@@ -164,6 +165,7 @@ public class RocketControl : MonoBehaviour
 
                     if (angle > 90 && rightAround == false) //反時計回り
                     {
+                        relativeRocketPos = this.gameObject.transform.position - planetObject.transform.position;//軌道の半径となるベクトルの取得
                         speed = delta.magnitude * orbitSpeedBounus;//速さの計算
                         saveVelocity = rb.velocity;//速度の保存
                         rb.velocity = Vector3.zero;//Rigidbodyの機能停止
@@ -171,21 +173,16 @@ public class RocketControl : MonoBehaviour
                     }
                     if (rightAround == true)//反時計回り実行
                     {
-                        Vector3 relativeRocketPos = this.gameObject.transform.position - planetObject.transform.position;
                         float rotateSpeed = Mathf.Rad2Deg * (speed / GravityLength);//角速度の計算
-                        Vector3 movedVector = Quaternion.Euler(0, -rotateSpeed * Time.deltaTime, 0) * relativeRocketPos;
-                        Vector3 rocketPos = movedVector + planetObject.transform.position;
-                        this.gameObject.transform.position = rocketPos;
-                        nowPosition = rocketPos;
-                        
-                        /*
-                        myTransform.RotateAround(PlanetPos, Vector3.up, -rotateSpeed * Time.deltaTime);//回転の実行
-                        myTransform.position += planet.plaDelta;
-                        */
+                        relativeRocketPos = Quaternion.Euler(0, -rotateSpeed * Time.deltaTime, 0) * relativeRocketPos;//ベクトルの回転
+                        Vector3 rocketPos = relativeRocketPos + planetObject.transform.position;//ロケットの位置決定
+                        this.gameObject.transform.position = rocketPos;//回転の実行
+                        NowPosition = rocketPos;
                     }
 
                     if (angle < -90 && leftAround == false) //時計回り
                     {
+                        relativeRocketPos = this.gameObject.transform.position - planetObject.transform.position;//軌道の半径となるベクトルの取得
                         speed = delta.magnitude * orbitSpeedBounus;//速さの計算
                         saveVelocity = rb.velocity;//速度の保存
                         rb.velocity = Vector3.zero;//Rigidbodyの機能停止
@@ -193,22 +190,17 @@ public class RocketControl : MonoBehaviour
                     }
                     if (leftAround == true)
                     {
-                        Vector3 relativeRocketPos = this.gameObject.transform.position - planetObject.transform.position;
                         float rotateSpeed = Mathf.Rad2Deg * (speed / GravityLength);//角速度の計算
-                        Vector3 movedVector = Quaternion.Euler(0, rotateSpeed * Time.deltaTime, 0) * relativeRocketPos;
-                        Vector3 rocketPos = movedVector + planetObject.transform.position;
-                        this.gameObject.transform.position = rocketPos;
-                        nowPosition = rocketPos;
-                        /*
-                        myTransform.RotateAround(PlanetPos, Vector3.up, rotateSpeed * Time.deltaTime);//回転の実行
-                        myTransform.position += planet.plaDelta;
-                        */
+                        relativeRocketPos = Quaternion.Euler(0, rotateSpeed * Time.deltaTime, 0) * relativeRocketPos;//ベクトルの回転
+                        Vector3 rocketPos = relativeRocketPos + planetObject.transform.position;//ロケットの位置決定
+                        this.gameObject.transform.position = rocketPos;//回転の実行
+                        NowPosition = rocketPos;
                     }
                 }
                 else
                 {
                     //外側の場合
-                    Debug.Log("Outside");                
+                    //Debug.Log("Outside");                
                     //重力を与える
                     rb.AddForce(GravityForth);
                 }

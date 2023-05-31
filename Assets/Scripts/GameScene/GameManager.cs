@@ -4,19 +4,23 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] Planet planetPrefab = null!;
-    private int minSpawnableRange = 300;
+    [SerializeField] private Planet planetPrefab = null!;
+    [SerializeField] private GameObject planetParent = null!;
+    [SerializeField] private RocketControl rocketControl = null!;
+    [SerializeField] private PlanetManager planetManager = null!;
 
     void Start()
     {
-        while (minSpawnableRange <= 1000)
-        {
-            Planet planet = Instantiate(planetPrefab);
-        }
+        Application.targetFrameRate = 60;
+        planetManager.FirstSpawn();
     }
 
     void Update()
     {
-        
+        float rocketDistance = rocketControl.NowPosition.magnitude;
+        bool _inOrbit = rocketControl.inOrbit;
+        if(!_inOrbit) planetManager.PlanetDestroy(rocketDistance);
+        planetManager.PlanetSpawn(rocketDistance);
+        planetManager.PlanetMove();
     }
 }
