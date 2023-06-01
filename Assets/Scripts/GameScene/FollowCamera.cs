@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FollowCamera : MonoBehaviour
@@ -20,7 +18,7 @@ public class FollowCamera : MonoBehaviour
     }
 
     
-    void Update()
+    public void CameraUpdate()
     {
         if(rc.inOrbit == false)//‹O“¹‚ÌŠO
         {

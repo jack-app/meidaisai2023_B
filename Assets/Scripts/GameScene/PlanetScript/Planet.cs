@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Planet : MonoBehaviour
@@ -22,7 +21,8 @@ public class Planet : MonoBehaviour
     // ˆÊ’u‚ð•Ï‚¦‚é
     public void Move()
     {
-
+        float rotateAngle = 1f / (10 * (orbitRadius / 1000f + 1f));
+        this.transform.RotateAround(new Vector3(0, 0, 0), Vector3.up, rotateAngle);
     }
 
     public void Destrroy()

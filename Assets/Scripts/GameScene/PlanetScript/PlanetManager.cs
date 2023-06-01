@@ -1,10 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlanetManager : MonoBehaviour
 {
-    public List<Planet> planetList = new List<Planet>();
+    private List<Planet> planetList = new List<Planet>();
     [SerializeField] private Planet planetPrefab = null!;
     [SerializeField] private GameObject planetParent = null!;
     private int minSpawnableRange = 300;
@@ -50,7 +49,6 @@ public class PlanetManager : MonoBehaviour
 
     public void PlanetDestroy(float rocketDistance)
     {
-        Debug.Log("Destroy : " + rocketDistance);
         List<int> destroyIndex = new List<int>();
         foreach (Planet planet in planetList)
         {

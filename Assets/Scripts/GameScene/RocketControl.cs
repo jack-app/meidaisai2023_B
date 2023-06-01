@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RocketControl : MonoBehaviour
@@ -35,27 +33,22 @@ public class RocketControl : MonoBehaviour
     private Vector3 relativeRocketPos;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         rb = GetComponent<Rigidbody>();
         myTransform = transform;
     }    
     
     //速度ベクトル(delta)の取得
-    void GetDeltaPos()
+    private void GetDeltaPos()
     {
         NowPosition = myTransform.position;
         delta = (NowPosition - prePosition) / Time.deltaTime;
         prePosition = NowPosition;
     }
 
-    void CompleatEscape()
-    {
-        escape = false;
-    }
 
-    // Update is called once per frame
-    void FixedUpdate()
+    public void RocketUpdate()
     {
         GetDeltaPos();
         if (start == false)//スタートダッシュ
@@ -121,7 +114,17 @@ public class RocketControl : MonoBehaviour
         //Debug.Log(normalizedAngle);
     }
 
-    void OnTriggerEnter(Collider collider)
+    private void RocketCrash()
+    {
+        
+    }
+
+    private void OnCollisionEnter(Collision collision) //ぶつかったとき
+    {
+        RocketCrash();
+    }
+
+    private void OnTriggerEnter(Collider collider) //重力圏に入ったとき
     {
         //近づいた惑星の情報の取得
         if (collider.gameObject.tag == "Planet")
@@ -133,7 +136,7 @@ public class RocketControl : MonoBehaviour
         planetObject = collider.gameObject;
     }
 
-    void OnTriggerStay(Collider collider)
+    private void OnTriggerStay(Collider collider) //重力圏にいるとき
     {
         if (escape == false)//軌道離脱中か判定
         {
