@@ -26,26 +26,30 @@ public class RocketControl : MonoBehaviour
     public Vector3 saveVelocity; // ���x�x�N�g���̕ۑ�
     public Vector3 PlanetPos; // �f���̈ʒu
     public Vector3 delta; // ���P�b�g�̑��x�x�N�g��
-    public Vector3 NowPosition { get; private set; } // ���̃��P�b�g�̈ʒu
+    public Vector3 nowPosition { get; private set; } // ���̃��P�b�g�̈ʒu
     private Rigidbody rb;
     private Transform myTransform;
     private GameObject planetObject;
     public GameObject orbitCenter;
+    private GameObject mainCamera;
+    private GameObject subCamera;
     private Planet planet;
     private bool start = false; // �X�^�[�g�������̔���
     private bool escape = false; // �O������̗��E������
     private bool emergencyAvoidance = false;//���ړ�������
     private bool spCooldown = false;//sp����̃N�[���_�E������
     private Vector3 prePosition; // 1�t���[���O�̃��P�b�g�̈ʒu
-    private Vector3 nowPosition;
     private float orbitalRadius; // �O�����a
     private float mass = 1; // �f���̎���
     private float speed; // ���P�b�g�̑���
     private Vector3 relativeRocketPos;
+    private float rotateSpeed;
 
     // Start is called before the first frame update
     private void Start()
     {
+        mainCamera = GameObject.Find("Main Camera");
+        subCamera = GameObject.Find("Sub Camera");
         rb = GetComponent<Rigidbody>();
         myTransform = transform;
     }    
@@ -110,7 +114,7 @@ public class RocketControl : MonoBehaviour
                     fuel -= spFuel;//fuel��10����
                     emergencyAvoidance = true;//���ړ�����on
                     spCooldown = true;//sp�N�[���_�E��on
-                    rb.AddForce(horizonMove);//���ړ��̎��s
+                    rb.velocity += horizonMove;//���ړ��̎��s
                     Invoke("cooldown", spCooltime);
                     StartCoroutine("antiHorizon", horizonMove);//���ړ���~�̌Ăяo��
                 }
@@ -123,7 +127,7 @@ public class RocketControl : MonoBehaviour
 
             float chargePower = System.Math.Min(charge, maxCharge);//charge�̍ő�l����
             float escapeSpeed = saveVelocity.magnitude;//�O�����E���̑���
-
+            Debug.Log(escapeSpeed);
             if (Input.GetButton("Jump"))
             {
                 Debug.Log("charge");
@@ -132,8 +136,10 @@ public class RocketControl : MonoBehaviour
             if (Input.GetButtonUp("Jump"))//�X�y�[�X�L�[�𗣂����Ƃ�
             {
                 Debug.Log("Escape");
-                rb.velocity = forward * escapeSpeed * chargePower;//���ʕ����ɑ��x��^����           
-                charge = 1.05f;//charge�̃��Z�b�g
+                mainCamera.SetActive(true);
+                subCamera.SetActive(false);
+                rb.velocity = forward * (escapeSpeed + (20f * chargePower));//���ʕ����ɑ��x��^����           
+                charge = 0f;//charge�̃��Z�b�g
                 escape = true;//escape������on
                 Invoke("CompleatEscape", escapeTime);//escape�����̌Ăяo��
             }
@@ -199,7 +205,7 @@ public class RocketControl : MonoBehaviour
 
     private void OnTriggerStay(Collider collider) //�d�͌��ɂ���Ƃ�
     {
-        if (escape == false)//�O�����E��������
+        if (!escape && !emergencyAvoidance)//�O�����E��������
         {
             if (collider.gameObject.tag == "Planet")
             {
@@ -208,7 +214,7 @@ public class RocketControl : MonoBehaviour
                     planet = planetObject.GetComponent<Planet>();
                     mass = planet.mass;
                     orbitalRadius = planet.orbitLevel1;
-                    Debug.Log(planetObject.name);
+                    //Debug.Log(planetObject.name);
                     //�d��
                     //�߂Â����f���̍��W�̎擾
                     PlanetPos = planetObject.transform.position;
@@ -233,50 +239,55 @@ public class RocketControl : MonoBehaviour
                                                                                     //�Ȃ��p��_�E0����180_��0����-180                          
                                                                                     //Debug.Log(angle);
 
-                        if (angle > 90 && inOrbit == false) //�����v���
+                        if (angle > 90 && !leftAround && !rightAround) //�����v���
                         {
                             relativeRocketPos = -gravityDirection;//�O���̔��a�ƂȂ�x�N�g���̎擾
                             speed = delta.magnitude * orbitSpeedBounus;//�����̌v�Z
+                            rotateSpeed = Mathf.Rad2Deg * (speed / relativeRocketPos.magnitude);//�p���x�̌v�Z                         
                             saveVelocity = rb.velocity;//���x�̕ۑ�
                             rb.velocity = Vector3.zero;//Rigidbody�̋@�\��~
                             rightAround = true;//�����v��蔻��ON
                             orbitCenter = planetObject;
-                        }
-                        if (rightAround == true)//�����v�����s
-                        {
-                            Debug.Log(relativeRocketPos.magnitude);
-                            float rotateSpeed = Mathf.Rad2Deg * (speed / relativeRocketPos.magnitude);//�p���x�̌v�Z                         
-                            relativeRocketPos = Quaternion.Euler(0, -rotateSpeed * Time.deltaTime , 0) * relativeRocketPos;//�x�N�g���̉�]
-                            Vector3 rocketPos = relativeRocketPos + orbitCenter.transform.position;//���P�b�g�̈ʒu����
-                            this.gameObject.transform.position = rocketPos;//��]�̎��s
-                            nowPosition = rocketPos;
-                            /*
-                            myTransform.RotateAround(PlanetPos, Vector3.up, -rotateSpeed * Time.deltaTime);//��]�̎��s
-                            myTransform.position += planet.plaDelta;
-                            */
+                            mainCamera.SetActive(false);
+                            subCamera.SetActive(true);
                         }
 
-                        if (angle < -90 && inOrbit == false) //���v���
+                        if (angle < -90 && !leftAround && !rightAround) //���v���
                         {
                             relativeRocketPos = -gravityDirection;//�O���̔��a�ƂȂ�x�N�g���̎擾
                             speed = delta.magnitude * orbitSpeedBounus;//�����̌v�Z
+                            rotateSpeed = Mathf.Rad2Deg * (speed / relativeRocketPos.magnitude);//�p���x�̌v�Z
                             saveVelocity = rb.velocity;//���x�̕ۑ�
                             rb.velocity = Vector3.zero;//Rigidbody�̋@�\��~
                             leftAround = true;//���v��蔻��ON
                             orbitCenter = planetObject;
+                            mainCamera.SetActive(false);
+                            subCamera.SetActive(true);
                         }
-                        if (leftAround == true)
-                        {
-                            float rotateSpeed = Mathf.Rad2Deg * (speed / relativeRocketPos.magnitude);//�p���x�̌v�Z
-                            relativeRocketPos = Quaternion.Euler(0, rotateSpeed * Time.deltaTime, 0) * relativeRocketPos;//�x�N�g���̉�]
-                            Vector3 rocketPos = relativeRocketPos + orbitCenter.transform.position;//���P�b�g�̈ʒu����
-                            this.gameObject.transform.position = rocketPos;//��]�̎��s
-                            nowPosition = rocketPos;
-                            /*
-                            myTransform.RotateAround(PlanetPos, Vector3.up, rotateSpeed * Time.deltaTime);//��]�̎��s
-                            myTransform.position += planet.plaDelta;
-                            */
-                        }
+                    }
+
+                    if (rightAround)//�����v�����s
+                    {
+                        Debug.Log(colList);
+                        relativeRocketPos = Quaternion.Euler(0, -rotateSpeed * Time.deltaTime / Mathf.Pow(colList.Count, 2), 0) * relativeRocketPos;//�x�N�g���̉�]
+                        Vector3 rocketPos = relativeRocketPos + orbitCenter.transform.position;//���P�b�g�̈ʒu����
+                        this.gameObject.transform.position = rocketPos;//��]�̎��s
+                        nowPosition = rocketPos;
+                        /*
+                        myTransform.RotateAround(PlanetPos, Vector3.up, -rotateSpeed * Time.deltaTime);//��]�̎��s
+                        myTransform.position += planet.plaDelta;
+                        */
+                    }
+                    else if (leftAround)
+                    {
+                        relativeRocketPos = Quaternion.Euler(0, rotateSpeed * Time.deltaTime / Mathf.Pow(colList.Count, 2), 0) * relativeRocketPos;//�x�N�g���̉�]
+                        Vector3 rocketPos = relativeRocketPos + orbitCenter.transform.position;//���P�b�g�̈ʒu����
+                        this.gameObject.transform.position = rocketPos;//��]�̎��s
+                        nowPosition = rocketPos;
+                        /*
+                        myTransform.RotateAround(PlanetPos, Vector3.up, rotateSpeed * Time.deltaTime);//��]�̎��s
+                        myTransform.position += planet.plaDelta;
+                        */
                     }
                     else if (!inOrbit)
                     {
@@ -292,9 +303,9 @@ public class RocketControl : MonoBehaviour
     }
     private IEnumerator antiHorizon(Vector3 horizonMove)//���ړ��̒�~ 
     {
-        yield return new WaitForSeconds(0.5f);
-        rb.AddForce(-horizonMove);//���ړ��̒�~�̎��s
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.15f);
+        rb.velocity -= horizonMove;//���ړ��̒�~�̎��s
+        yield return new WaitForSeconds(0.05f);
         emergencyAvoidance = false;//���ړ�����off
     }
     private void cooldown()//sp����N�[���_�E�����

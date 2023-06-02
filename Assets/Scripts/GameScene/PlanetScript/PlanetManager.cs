@@ -13,7 +13,7 @@ public class PlanetManager : MonoBehaviour
     {
         while (minSpawnableRange <= 10000)
         {
-            if (random.Next(100) <= 1)
+            if (random.Next(100) <= 2)
             {
                 Planet planet = Instantiate(planetPrefab, planetParent.transform);
                 planetList.Add(planet);
@@ -28,7 +28,7 @@ public class PlanetManager : MonoBehaviour
     {
         while (minSpawnableRange <= rocketDistance + 10000)
         {
-            if (random.Next(100) <= 1)
+            if (random.Next(100) <= 2)
             {
                 Planet planet = Instantiate(planetPrefab, planetParent.transform);
                 planetList.Add(planet);
