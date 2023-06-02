@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MainCamera : MonoBehaviour
@@ -8,7 +6,6 @@ public class MainCamera : MonoBehaviour
     [SerializeField] private float back = 100f;
     [SerializeField] private float up = 200f;
     [SerializeField] private float angle;
-    // Start is called before the first frame update
     void Start()
     {
         mytransform = this.transform;
@@ -19,10 +16,5 @@ public class MainCamera : MonoBehaviour
         localAngle.z = 0f; // ローカル座標を基準に、z軸を軸にした回転を0に変更
         mytransform.localEulerAngles = localAngle; // 回転角度を設定
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
     }
 }

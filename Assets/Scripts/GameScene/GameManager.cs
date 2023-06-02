@@ -4,7 +4,7 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private RocketControl rocketControl = null!;
     [SerializeField] private PlanetManager planetManager = null!;
-    [SerializeField] private FollowCamera followCamera = null!;
+    [SerializeField] private SubCamera subCamera = null!;
 
     void Start()
     {
@@ -16,10 +16,11 @@ public class GameManager : MonoBehaviour
     {
         float rocketDistance = rocketControl.NowPosition.magnitude;
         bool _inOrbit = rocketControl.inOrbit;
+        if (rocketControl.crash) return;
         if(!_inOrbit) planetManager.PlanetDestroy(rocketDistance);
         planetManager.PlanetSpawn(rocketDistance);
         planetManager.PlanetMove();
         rocketControl.RocketUpdate();
-        followCamera.CameraUpdate();
+        subCamera.CameraUpdate();
     }
 }

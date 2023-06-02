@@ -4,33 +4,23 @@ using UnityEngine;
 
 public class SubCamera : MonoBehaviour
 {
-    private GameObject obj;
-    private Transform mytransform;
+    [SerializeField] private GameObject obj;
     [SerializeField] private float back = 100f;
     [SerializeField] private float up = 200f;
     [SerializeField] private float angle;
-    RocketControl rc;
+    [SerializeField] private RocketControl rc;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        obj = GameObject.Find("Rocket");
-        mytransform = this.transform;
-        rc = obj.GetComponent<RocketControl>();
-
-    }
-
-    // Update is called once per frame
-    void Update()
+    public void CameraUpdate()
     {
         if (rc.inOrbit == false)//軌道の外
         {
             Vector3 centerDirection = obj.transform.position * (-1);//ロケットからの宇宙中心方向のベクトル
             Vector3 nlzDirection = centerDirection.normalized;//単位ベクトル化
             Vector3 backposition = obj.transform.position + (back * nlzDirection);//カメラのロケット後方位置
-            mytransform.position = new Vector3(backposition.x, up, backposition.z);//位置変更の実行
+            Debug.Log(backposition);
+            this.transform.position = new Vector3(backposition.x, up, backposition.z);//位置変更の実行
             float　centerAngle = Vector3.Angle(obj.transform.position, Vector3.forward);//カメラ角度の決定
-            mytransform.rotation = Quaternion.Euler(angle, centerAngle, 0.0f);//カメラ角度変更の実行
+            this.transform.rotation = Quaternion.Euler(angle, centerAngle, 0.0f);//カメラ角度変更の実行
             
 
         }
@@ -40,9 +30,9 @@ public class SubCamera : MonoBehaviour
             Vector3 centerDirection = planetPos * (-1);//惑星からの宇宙中心方向のベクトル
             Vector3 nlzDirection = centerDirection.normalized;//単位ベクトル化
             Vector3 backposition = planetPos + (back * nlzDirection);//カメラの惑星後方位置
-            mytransform.position = new Vector3(backposition.x, up, backposition.z);//位置変更の実行
+            this.transform.position = new Vector3(backposition.x, up, backposition.z);//位置変更の実行
             float centerAngle = Vector3.Angle(planetPos, Vector3.forward);//カメラ角度の決定
-            mytransform.rotation = Quaternion.Euler(angle, centerAngle, 0.0f);//カメラ角度変更の実行
+            this.transform.rotation = Quaternion.Euler(angle, centerAngle, 0.0f);//カメラ角度変更の実行
 
         }
 

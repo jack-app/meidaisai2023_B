@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RocketControl : MonoBehaviour
@@ -17,6 +19,7 @@ public class RocketControl : MonoBehaviour
     [SerializeField] private float horizonSpeed;//���ړ����x
     [SerializeField] private float spFuel;//���ړ����x�ł̔R�������
     [SerializeField] GameObject explosionPrefab;
+    public bool crash { get; private set; } = false;
     public bool inOrbit = false; // �O���ɏ���Ă邩�̔���
     public bool leftAround = false; // ���v���
     public bool rightAround = false; // �����v���
@@ -34,6 +37,7 @@ public class RocketControl : MonoBehaviour
     private bool emergencyAvoidance = false;//���ړ�������
     private bool spCooldown = false;//sp����̃N�[���_�E������
     private Vector3 prePosition; // 1�t���[���O�̃��P�b�g�̈ʒu
+    private Vector3 nowPosition;
     private float orbitalRadius; // �O�����a
     private float mass = 1; // �f���̎���
     private float speed; // ���P�b�g�̑���
@@ -58,6 +62,15 @@ public class RocketControl : MonoBehaviour
     void CompleatEscape()
     {
         escape = false;
+    }
+
+    private void RocketDestroy()
+    {
+        crash = true;
+        Instantiate(explosionPrefab, this.transform.position, Quaternion.identity);
+        this.gameObject.transform.DetachChildren();
+        Destroy(this.gameObject);
+        Destroy(this);
     }
 
     public void RocketUpdate()
@@ -127,9 +140,7 @@ public class RocketControl : MonoBehaviour
             if(charge > exprosionCharge)//charge���������Ƃ����j
             {
                 Debug.Log("Explosion!");//��
-                this.gameObject.transform.DetachChildren();
-                Instantiate(explosionPrefab, this.transform.position, Quaternion.identity);
-                Destroy(this.gameObject);
+                RocketDestroy();
             }
         }
         //Debug.Log(speedVector.magnitude);
@@ -159,14 +170,10 @@ public class RocketControl : MonoBehaviour
         }
     }
 
-    private void RocketCrash()
-    {
-        
-    }
-
     private void OnCollisionEnter(Collision collision) //�Ԃ������Ƃ�
     {
-        RocketCrash();
+        Debug.Log("CrashExprosion!");//��
+        RocketDestroy();
     }
 
     private void OnTriggerEnter(Collider collider) //�d�͌��ɓ������Ƃ�
@@ -293,13 +300,5 @@ public class RocketControl : MonoBehaviour
     private void cooldown()//sp����N�[���_�E�����
     {
         spCooldown = false;
-    }
-
-    void OnCollisionEnter(Collision collision)//�Փ˔���
-    {
-        Debug.Log("CrashExprosion!");//��
-        Instantiate(explosionPrefab, this.transform.position, Quaternion.identity);
-        this.gameObject.transform.DetachChildren();
-        Destroy(this.gameObject);
     }
 }
