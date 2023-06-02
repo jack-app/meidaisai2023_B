@@ -15,6 +15,5 @@ public class MainCamera : MonoBehaviour
         localAngle.y = 0f; // ローカル座標を基準に、y軸を軸にした回転を0に変更
         localAngle.z = 0f; // ローカル座標を基準に、z軸を軸にした回転を0に変更
         mytransform.localEulerAngles = localAngle; // 回転角度を設定
-
     }
 }

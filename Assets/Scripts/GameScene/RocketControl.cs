@@ -26,7 +26,7 @@ public class RocketControl : MonoBehaviour
     public Vector3 saveVelocity; // ���x�x�N�g���̕ۑ�
     public Vector3 PlanetPos; // �f���̈ʒu
     public Vector3 delta; // ���P�b�g�̑��x�x�N�g��
-    public Vector3 NowPosition { get; private set; } // ���̃��P�b�g�̈ʒu
+    public Vector3 nowPosition { get; private set; } // ���̃��P�b�g�̈ʒu
     private Rigidbody rb;
     private Transform myTransform;
     private GameObject planetObject;
@@ -37,7 +37,6 @@ public class RocketControl : MonoBehaviour
     private bool emergencyAvoidance = false;//���ړ�������
     private bool spCooldown = false;//sp����̃N�[���_�E������
     private Vector3 prePosition; // 1�t���[���O�̃��P�b�g�̈ʒu
-    private Vector3 nowPosition;
     private float orbitalRadius; // �O�����a
     private float mass = 1; // �f���̎���
     private float speed; // ���P�b�g�̑���

@@ -9,18 +9,23 @@ public class PlanetManager : MonoBehaviour
     private int minSpawnableRange = 300;
     private System.Random random = new System.Random();
 
+    private void Spawn()
+    {
+        if (random.Next(100) <= 1)
+        {
+            Planet planet = Instantiate(planetPrefab, planetParent.transform);
+            planetList.Add(planet);
+            int planetSize = planet.Initialize(minSpawnableRange);
+            minSpawnableRange += planetSize;
+        }
+        minSpawnableRange++;
+    }
+
     public void FirstSpawn()
     {
         while (minSpawnableRange <= 10000)
         {
-            if (random.Next(100) <= 1)
-            {
-                Planet planet = Instantiate(planetPrefab, planetParent.transform);
-                planetList.Add(planet);
-                int planetSize = planet.Initialize(minSpawnableRange);
-                minSpawnableRange += planetSize;
-            }
-            minSpawnableRange++;
+            Spawn();
         }
     }
 
@@ -28,14 +33,7 @@ public class PlanetManager : MonoBehaviour
     {
         while (minSpawnableRange <= rocketDistance + 10000)
         {
-            if (random.Next(100) <= 1)
-            {
-                Planet planet = Instantiate(planetPrefab, planetParent.transform);
-                planetList.Add(planet);
-                int planetSize = planet.Initialize(minSpawnableRange);
-                minSpawnableRange += planetSize;
-            }
-            minSpawnableRange++;
+            Spawn();
         }
     }
 
@@ -52,7 +50,7 @@ public class PlanetManager : MonoBehaviour
         List<int> destroyIndex = new List<int>();
         foreach (Planet planet in planetList)
         {
-            if (planet.orbitRadius >= rocketDistance) break;
+            if (planet.orbitRadius + 100 >= rocketDistance) break;
             destroyIndex.Insert(0, planetList.IndexOf(planet));
         }
         foreach (int num in destroyIndex)
