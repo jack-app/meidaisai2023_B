@@ -2,34 +2,41 @@ using UnityEngine;
 
 public class RocketControl : MonoBehaviour
 {
-    [SerializeField] private float GravityCoefficient;//–œ—Lˆø—Í’è”
-    [SerializeField] private float orbitSpeedBounus;//‹O“¹“Ë“ü‚ÌƒXƒs[ƒhŠ´UP‰‰o‚Ì”{—¦
-    [SerializeField] private float startDash;//‰‘¬“x
-    [SerializeField] private float escapeTime;//—£’EŠ®—¹‚Ü‚Å‚ÌŠÔ
-    [SerializeField] private float maxCharge;
-    [SerializeField] private float charge;
-    [SerializeField] private float chargeSpeed;
-    [SerializeField] private float Air;
-    [SerializeField] private float AirDecrease;
-    [SerializeField] private float AirIncrease;
-    [SerializeField] private float HorizonSpeed;
-    public bool inOrbit = false; // ‹O“¹‚Éæ‚Á‚Ä‚é‚©‚Ì”»’è
-    public bool leftAround = false; // Œv‰ñ‚è
-    public bool rightAround = false; // ”½Œv‰ñ‚è
-    public Vector3 saveVelocity; // ‘¬“xƒxƒNƒgƒ‹‚Ì•Û‘¶
-    public Vector3 PlanetPos; // ˜f¯‚ÌˆÊ’u
-    public Vector3 delta; // ƒƒPƒbƒg‚Ì‘¬“xƒxƒNƒgƒ‹
-    public Vector3 NowPosition { get; private set; } // ¡‚ÌƒƒPƒbƒg‚ÌˆÊ’u
+    List<GameObject> colList = new List<GameObject>();
+    [SerializeField] private float GravityCoefficient;//ï¿½ï¿½ï¿½Lï¿½ï¿½ï¿½Í’è”
+    [SerializeField] private float orbitSpeedBounus;//ï¿½Oï¿½ï¿½ï¿½Ë“ï¿½ï¿½ï¿½ï¿½ÌƒXï¿½sï¿½[ï¿½hï¿½ï¿½UPï¿½ï¿½ï¿½oï¿½Ì”{ï¿½ï¿½
+    [SerializeField] private float startDash;//ï¿½ï¿½ï¿½ï¿½ï¿½x
+    [SerializeField] private float escapeTime;//ï¿½ï¿½ï¿½Eï¿½ï¿½ï¿½ï¿½ï¿½Ü‚Å‚Ìï¿½ï¿½ï¿½
+    [SerializeField] private float maxCharge;//chargeï¿½ÌÅ‘ï¿½l
+    [SerializeField] private float charge;//chargeï¿½Ì’l
+    [SerializeField] private float chargeSpeed;//chargeï¿½Ì‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½x
+    [SerializeField] private float exprosionCharge;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ç”šï¿½jï¿½ï¿½ï¿½ï¿½charge
+    [SerializeField] private float fuel;//ï¿½ï¿½ï¿½Ú“ï¿½ï¿½Åï¿½ï¿½ï‚·ï¿½ï¿½l
+    [SerializeField] private float maxFuel;//ï¿½ï¿½ï¿½Ú“ï¿½ï¿½ñ”‚ÌÅ‘ï¿½l
+    [SerializeField] private float spCooltime;//spï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½Ú“ï¿½)ï¿½ÌƒNï¿½[ï¿½ï¿½ï¿½^ï¿½Cï¿½ï¿½
+    [SerializeField] private float horizonSpeed;//ï¿½ï¿½ï¿½Ú“ï¿½ï¿½ï¿½ï¿½x
+    [SerializeField] private float spFuel;//ï¿½ï¿½ï¿½Ú“ï¿½ï¿½ï¿½ï¿½xï¿½Å‚Ì”Rï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    [SerializeField] GameObject explosionPrefab;
+    public bool inOrbit = false; // ï¿½Oï¿½ï¿½ï¿½Éï¿½ï¿½ï¿½Ä‚é‚©ï¿½Ì”ï¿½ï¿½ï¿½
+    public bool leftAround = false; // ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½
+    public bool rightAround = false; // ï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½
+    public Vector3 saveVelocity; // ï¿½ï¿½ï¿½xï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½Ì•Û‘ï¿½
+    public Vector3 PlanetPos; // ï¿½fï¿½ï¿½ï¿½ÌˆÊ’u
+    public Vector3 delta; // ï¿½ï¿½ï¿½Pï¿½bï¿½gï¿½Ì‘ï¿½ï¿½xï¿½xï¿½Nï¿½gï¿½ï¿½
+    public Vector3 NowPosition { get; private set; } // ï¿½ï¿½ï¿½Ìƒï¿½ï¿½Pï¿½bï¿½gï¿½ÌˆÊ’u
     private Rigidbody rb;
     private Transform myTransform;
     private GameObject planetObject;
+    public GameObject orbitCenter;
     private Planet planet;
-    private bool start = false; // ƒXƒ^[ƒg‚µ‚½‚©‚Ì”»’è
-    private bool escape = false; // ‹O“¹‚©‚ç‚Ì—£’E’†”»’è
-    private Vector3 prePosition; // 1ƒtƒŒ[ƒ€‘O‚ÌƒƒPƒbƒg‚ÌˆÊ’u
-    private float orbitalRadius; // ‹O“¹”¼Œa
-    private float mass = 1; // ˜f¯‚Ì¿—Ê
-    private float speed; // ƒƒPƒbƒg‚Ì‘¬‚³
+    private bool start = false; // ï¿½Xï¿½^ï¿½[ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì”ï¿½ï¿½ï¿½
+    private bool escape = false; // ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì—ï¿½ï¿½Eï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    private bool emergencyAvoidance = false;//ï¿½ï¿½ï¿½Ú“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    private bool spCooldown = false;//spï¿½ï¿½ï¿½ï¿½ÌƒNï¿½[ï¿½ï¿½ï¿½_ï¿½Eï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    private Vector3 prePosition; // 1ï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Oï¿½Ìƒï¿½ï¿½Pï¿½bï¿½gï¿½ÌˆÊ’u
+    private float orbitalRadius; // ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½a
+    private float mass = 1; // ï¿½fï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½
+    private float speed; // ï¿½ï¿½ï¿½Pï¿½bï¿½gï¿½Ì‘ï¿½ï¿½ï¿½
     private Vector3 relativeRocketPos;
 
     // Start is called before the first frame update
@@ -39,19 +46,24 @@ public class RocketControl : MonoBehaviour
         myTransform = transform;
     }    
     
-    //‘¬“xƒxƒNƒgƒ‹(delta)‚Ìæ“¾
+    //ï¿½ï¿½ï¿½xï¿½xï¿½Nï¿½gï¿½ï¿½(delta)ï¿½Ìæ“¾
     private void GetDeltaPos()
     {
-        NowPosition = myTransform.position;
-        delta = (NowPosition - prePosition) / Time.deltaTime;
-        prePosition = NowPosition;
+        nowPosition = myTransform.position;
+        delta = (nowPosition - prePosition) / Time.deltaTime;
+        prePosition = nowPosition;
+        //Debug.Log(delta.magnitude);
     }
-
+    //ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Eï¿½oï¿½ï¿½ï¿½ï¿½
+    void CompleatEscape()
+    {
+        escape = false;
+    }
 
     public void RocketUpdate()
     {
         GetDeltaPos();
-        if (start == false)//ƒXƒ^[ƒgƒ_ƒbƒVƒ…
+        if (start == false)//ï¿½Xï¿½^ï¿½[ï¿½gï¿½_ï¿½bï¿½Vï¿½ï¿½
         {
             if (Input.GetButtonDown("Jump"))
             {
@@ -60,39 +72,68 @@ public class RocketControl : MonoBehaviour
                 start = true;
             }
         }
-        Vector3 forward = myTransform.forward;//³–Ê•ûŒü‚ÌƒxƒNƒgƒ‹
-        Vector3 moveDirection = delta.normalized; //ˆÚ“®•ûŒü‚Ì’PˆÊƒxƒNƒgƒ‹      
-        var result = Quaternion.Euler(0, 90, 0) * moveDirection;//‰¡•ûŒü‚ÌƒxƒNƒgƒ‹
-        Vector3 HorizonMove = result * HorizonSpeed;
-        if (Input.GetButton("Horizontal"))//‰¡ˆÚ“®
+
+        if(start)//ï¿½Xï¿½^ï¿½[ï¿½gï¿½ï¿½fuleï¿½Ìï¿½ï¿½Ô“ï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½
         {
-            if (Air > 0)
+            fuel -= Time.deltaTime;
+        }
+        if(fuel <= 0)
+        {
+            Debug.Log("Finish!");
+        }
+        fuel = Mathf.Clamp(fuel, 0, maxFuel);//fuelï¿½ÌÅï¿½ï¿½lï¿½Å‘ï¿½lï¿½ï¿½ï¿½ï¿½
+
+        Vector3 forward = myTransform.forward;//ï¿½ï¿½ï¿½Ê•ï¿½ï¿½ï¿½ï¿½Ìƒxï¿½Nï¿½gï¿½ï¿½
+        Vector3 moveDirection = delta.normalized; //ï¿½Ú“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì’Pï¿½Êƒxï¿½Nï¿½gï¿½ï¿½
+        if (!inOrbit)//ï¿½Oï¿½ï¿½ï¿½ÌŠOï¿½Å‚Ì‘ï¿½ï¿½ï¿½
+        {
+            Vector3 horizon = Quaternion.Euler(0, 90, 0) * moveDirection;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒxï¿½Nï¿½gï¿½ï¿½
+            Vector3 horizonSize = horizon * horizonSpeed;
+            if (Input.GetButtonDown("Horizontal"))//ï¿½ï¿½ï¿½Ú“ï¿½
             {
-                Air -= AirDecrease;
-                rb.AddForce(Input.GetAxis("Horizontal") * HorizonMove);
+                if (fuel > spFuel && !spCooldown)
+                {
+                    Vector3 horizonMove = Input.GetAxis("Horizontal") * horizonSize;
+                    fuel -= spFuel;//fuelï¿½ï¿½10ï¿½ï¿½ï¿½ï¿½
+                    emergencyAvoidance = true;//ï¿½ï¿½ï¿½Ú“ï¿½ï¿½ï¿½ï¿½ï¿½on
+                    spCooldown = true;//spï¿½Nï¿½[ï¿½ï¿½ï¿½_ï¿½Eï¿½ï¿½on
+                    rb.AddForce(horizonMove);//ï¿½ï¿½ï¿½Ú“ï¿½ï¿½Ìï¿½ï¿½s
+                    Invoke("cooldown", spCooltime);
+                    StartCoroutine("antiHorizon", horizonMove);//ï¿½ï¿½ï¿½Ú“ï¿½ï¿½ï¿½~ï¿½ÌŒÄ‚Ñoï¿½ï¿½
+                }
             }
         }
-        if (inOrbit == true)//‹O“¹‚Ì’†‚Å‚Ì‘€ì
+
+        if (inOrbit)//ï¿½Oï¿½ï¿½ï¿½Ì’ï¿½ï¿½Å‚Ì‘ï¿½ï¿½ï¿½
         {
-            charge = System.Math.Min(charge, maxCharge);//charge‚ÌÅ‘å’l§ŒÀ
-            float escapeSpeed = saveVelocity.magnitude;//‹O“¹—£’E‚Ì‘¬‚³
+            Debug.Log("inOrbit");
+
+            float chargePower = System.Math.Min(charge, maxCharge);//chargeï¿½ÌÅ‘ï¿½lï¿½ï¿½ï¿½ï¿½
+            float escapeSpeed = saveVelocity.magnitude;//ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½Eï¿½ï¿½ï¿½Ì‘ï¿½ï¿½ï¿½
 
             if (Input.GetButton("Jump"))
             {
-                charge += chargeSpeed;//ƒXƒy[ƒX‚ğ‰Ÿ‚·ŠÔcharge‚ğ‘‰Á
+                Debug.Log("charge");
+                charge += chargeSpeed;//ï¿½Xï¿½yï¿½[ï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½chargeï¿½ğ‘‰ï¿½
             }
-
-            if (Input.GetButtonUp("Jump"))
+            if (Input.GetButtonUp("Jump"))//ï¿½Xï¿½yï¿½[ï¿½Xï¿½Lï¿½[ï¿½ğ—£‚ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½
             {
-                Debug.Log("escape");
-                rb.velocity = forward * escapeSpeed * charge;//³–Ê•ûŒü‚É‘¬“x‚ğ—^‚¦‚é           
-                charge = 1;
-                escape = true;
-                Invoke("CompleatEscape", escapeTime);
+                Debug.Log("Escape");
+                rb.velocity = forward * escapeSpeed * chargePower;//ï¿½ï¿½ï¿½Ê•ï¿½ï¿½ï¿½ï¿½É‘ï¿½ï¿½xï¿½ï¿½^ï¿½ï¿½ï¿½ï¿½           
+                charge = 1.05f;//chargeï¿½Ìƒï¿½ï¿½Zï¿½bï¿½g
+                escape = true;//escapeï¿½ï¿½ï¿½ï¿½ï¿½ï¿½on
+                Invoke("CompleatEscape", escapeTime);//escapeï¿½ï¿½ï¿½ï¿½ï¿½ÌŒÄ‚Ñoï¿½ï¿½
+            }
+            if(charge > exprosionCharge)//chargeï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ï¿½ï¿½j
+            {
+                Debug.Log("Explosion!");//ï¿½ï¿½
+                this.gameObject.transform.DetachChildren();
+                Instantiate(explosionPrefab, this.transform.position, Quaternion.identity);
+                Destroy(this.gameObject);
             }
         }
         //Debug.Log(speedVector.magnitude);
-        //‹O“¹‚Éæ‚Á‚Ä‚é‚©”»’è
+        //ï¿½Oï¿½ï¿½ï¿½Éï¿½ï¿½ï¿½Ä‚é‚©ï¿½ï¿½ï¿½ï¿½
         if(leftAround == true || rightAround == true)
         {
             inOrbit = true;
@@ -102,16 +143,20 @@ public class RocketControl : MonoBehaviour
             inOrbit = false;
         }
 
-        if(escape == true)//‹O“¹—£’E’†‚©”»’è
+        if(escape == true)//ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½Eï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         {
             leftAround = false;
             rightAround = false;
-        }        
-        var rocketAngle = Vector3.Angle(delta, Vector3.forward);
-        var rocketAxis = Vector3.Cross(delta, Vector3.forward).y < 0 ? -1 : 1;
-        var normalizedAngle = Mathf.Repeat(-rocketAngle * rocketAxis, 360);
-        myTransform.rotation = Quaternion.Euler(0, normalizedAngle, 0);
-        //Debug.Log(normalizedAngle);
+        }
+        //ï¿½ï¿½ï¿½Pï¿½bï¿½gï¿½ÌŠpï¿½xï¿½ï¿½ï¿½ï¿½
+        if (!emergencyAvoidance)//ï¿½ï¿½ï¿½Ú“ï¿½ï¿½ï¿½ï¿½ÍŒï¿½ï¿½ï¿½ï¿½ï¿½Ï‚ï¿½ï¿½È‚ï¿½
+        {
+            var rocketAngle = Vector3.Angle(delta, Vector3.forward);
+            var rocketAxis = Vector3.Cross(delta, Vector3.forward).y < 0 ? -1 : 1;
+            var normalizedAngle = Mathf.Repeat(-rocketAngle * rocketAxis, 360);
+            myTransform.rotation = Quaternion.Euler(0, normalizedAngle, 0);
+            //Debug.Log(normalizedAngle);
+        }
     }
 
     private void RocketCrash()
@@ -119,96 +164,142 @@ public class RocketControl : MonoBehaviour
         
     }
 
-    private void OnCollisionEnter(Collision collision) //‚Ô‚Â‚©‚Á‚½‚Æ‚«
+    private void OnCollisionEnter(Collision collision) //ï¿½Ô‚Â‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½
     {
         RocketCrash();
     }
 
-    private void OnTriggerEnter(Collider collider) //d—ÍŒ—‚É“ü‚Á‚½‚Æ‚«
+    private void OnTriggerEnter(Collider collider) //ï¿½dï¿½ÍŒï¿½ï¿½É“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½
     {
-        //‹ß‚Ã‚¢‚½˜f¯‚Ìî•ñ‚Ìæ“¾
-        if (collider.gameObject.tag == "Planet")
+        //ï¿½ß‚Ã‚ï¿½ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½Ìï¿½ï¿½Ìæ“¾
+        if (collider.gameObject.tag == "Planet" && !colList.Contains(collider.gameObject))
         {
-            planet = collider.GetComponent<Planet>();
+            colList.Add(collider.gameObject);
+            /*planet = collider.GetComponent<Planet>();
             mass = planet.mass;
             orbitalRadius = planet.orbitLevel1;
+            */
         }
-        planetObject = collider.gameObject;
+        //planetObject = collider.gameObject;
+    }
+    void OnTriggerExit(Collider collider)
+    {
+        if (collider.gameObject.tag == "Planet" && colList.Contains(collider.gameObject))
+        {
+            colList.Remove(collider.gameObject);
+        }
     }
 
-    private void OnTriggerStay(Collider collider) //d—ÍŒ—‚É‚¢‚é‚Æ‚«
+    private void OnTriggerStay(Collider collider) //ï¿½dï¿½ÍŒï¿½ï¿½É‚ï¿½ï¿½ï¿½Æ‚ï¿½
     {
-        if (escape == false)//‹O“¹—£’E’†‚©”»’è
+        if (escape == false)//ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½Eï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         {
             if (collider.gameObject.tag == "Planet")
             {
-                //Debug.Log(collider.gameObject.name);
-                //d—Í
-                //‹ß‚Ã‚¢‚½˜f¯‚ÌÀ•W‚Ìæ“¾
-                PlanetPos = collider.gameObject.transform.position;
-                //ƒƒPƒbƒg‚©‚ç˜f¯‚Ì’†S‚ÖŒü‚©‚¤ƒxƒNƒgƒ‹‚Ìæ“¾
-                Vector3 gravityDirection = PlanetPos - myTransform.position;
-                //ƒƒPƒbƒg‚Æ˜f¯‚Ì‹——£‚Ìæ“¾
-                float GravityLength = gravityDirection.magnitude;
-                Debug.Log(GravityLength);
-                //’PˆÊƒxƒNƒgƒ‹‚Ìæ“¾
-                Vector3 GravityNlz = gravityDirection.normalized;
-                //d—Í‚ÌŒvZ
-                Vector3 GravityForth = GravityNlz * GravityCoefficient * mass / Mathf.Pow(GravityLength, 2);
-
-                if (GravityLength < orbitalRadius)
+                foreach (GameObject planetObject in colList)
                 {
-                    //“à‘¤‚Ìê‡
-                    //Debug.Log("Inside");
-                    //‘¬“xƒxƒNƒgƒ‹‚Æ˜f¯‚ÉŒü‚©‚¤•ûŒü‚ÌƒxƒNƒgƒ‹‚Ì‚È‚·Šp                
-                    var axis = Vector3.Cross(gravityDirection, delta).y < 0 ? -1 : 1;//ŠOÏŒvZ(‚È‚·Šp‚ğ-180‚©‚ç180‚É‚·‚é‚Ì‚É•K—v)
-                    var angle = Vector3.Angle(gravityDirection, delta) * (axis);//‚È‚·Šp
-                                                                                      //‚È‚·Šp‚Í_‰E0‚©‚ç180_¶0‚©‚ç-180                          
-                                                                                      //Debug.Log(angle);
+                    planet = planetObject.GetComponent<Planet>();
+                    mass = planet.mass;
+                    orbitalRadius = planet.orbitLevel1;
+                    Debug.Log(planetObject.name);
+                    //ï¿½dï¿½ï¿½
+                    //ï¿½ß‚Ã‚ï¿½ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½Ìï¿½ï¿½Wï¿½Ìæ“¾
+                    PlanetPos = planetObject.transform.position;
+                    //ï¿½ï¿½ï¿½Pï¿½bï¿½gï¿½ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½Ì’ï¿½ï¿½Sï¿½ÖŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½Ìæ“¾
+                    Vector3 gravityDirection = PlanetPos - myTransform.position;
+                    //ï¿½ï¿½ï¿½Pï¿½bï¿½gï¿½Æ˜fï¿½ï¿½ï¿½Ì‹ï¿½ï¿½ï¿½ï¿½Ìæ“¾
+                    float GravityLength = gravityDirection.magnitude;
+                    //Debug.Log(GravityLength);
+                    //ï¿½Pï¿½Êƒxï¿½Nï¿½gï¿½ï¿½ï¿½Ìæ“¾
+                    Vector3 GravityNlz = gravityDirection.normalized;
+                    //ï¿½dï¿½Í‚ÌŒvï¿½Z
+                    Vector3 GravityForth = GravityNlz * GravityCoefficient * mass / Mathf.Pow(GravityLength, 2);
 
-                    if (angle > 90 && rightAround == false) //”½Œv‰ñ‚è
+                    if (GravityLength < orbitalRadius)
                     {
-                        relativeRocketPos = this.gameObject.transform.position - planetObject.transform.position;//‹O“¹‚Ì”¼Œa‚Æ‚È‚éƒxƒNƒgƒ‹‚Ìæ“¾
-                        speed = delta.magnitude * orbitSpeedBounus;//‘¬‚³‚ÌŒvZ
-                        saveVelocity = rb.velocity;//‘¬“x‚Ì•Û‘¶
-                        rb.velocity = Vector3.zero;//Rigidbody‚Ì‹@”\’â~
-                        rightAround = true;//”½Œv‰ñ‚è”»’èON
-                    }
-                    if (rightAround == true)//”½Œv‰ñ‚èÀs
-                    {
-                        float rotateSpeed = Mathf.Rad2Deg * (speed / GravityLength);//Šp‘¬“x‚ÌŒvZ
-                        relativeRocketPos = Quaternion.Euler(0, -rotateSpeed * Time.deltaTime, 0) * relativeRocketPos;//ƒxƒNƒgƒ‹‚Ì‰ñ“]
-                        Vector3 rocketPos = relativeRocketPos + planetObject.transform.position;//ƒƒPƒbƒg‚ÌˆÊ’uŒˆ’è
-                        this.gameObject.transform.position = rocketPos;//‰ñ“]‚ÌÀs
-                        NowPosition = rocketPos;
-                    }
+                        //ï¿½ï¿½ï¿½ï¿½Ìê‡
+                        Debug.Log("Inside");
+                        //Debug.Log(planet.name);
+                        //ï¿½ï¿½ï¿½xï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½Æ˜fï¿½ï¿½ï¿½ÉŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒxï¿½Nï¿½gï¿½ï¿½ï¿½Ì‚È‚ï¿½ï¿½p                
+                        var axis = Vector3.Cross(gravityDirection, delta).y < 0 ? -1 : 1;//ï¿½Oï¿½ÏŒvï¿½Z(ï¿½È‚ï¿½ï¿½pï¿½ï¿½-180ï¿½ï¿½ï¿½ï¿½180ï¿½É‚ï¿½ï¿½ï¿½Ì‚É•Kï¿½v)
+                        var angle = Vector3.Angle(gravityDirection, delta) * (axis);//ï¿½È‚ï¿½ï¿½p
+                                                                                    //ï¿½È‚ï¿½ï¿½pï¿½ï¿½_ï¿½E0ï¿½ï¿½ï¿½ï¿½180_ï¿½ï¿½0ï¿½ï¿½ï¿½ï¿½-180                          
+                                                                                    //Debug.Log(angle);
 
-                    if (angle < -90 && leftAround == false) //Œv‰ñ‚è
-                    {
-                        relativeRocketPos = this.gameObject.transform.position - planetObject.transform.position;//‹O“¹‚Ì”¼Œa‚Æ‚È‚éƒxƒNƒgƒ‹‚Ìæ“¾
-                        speed = delta.magnitude * orbitSpeedBounus;//‘¬‚³‚ÌŒvZ
-                        saveVelocity = rb.velocity;//‘¬“x‚Ì•Û‘¶
-                        rb.velocity = Vector3.zero;//Rigidbody‚Ì‹@”\’â~
-                        leftAround = true;//Œv‰ñ‚è”»’èON
+                        if (angle > 90 && inOrbit == false) //ï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½
+                        {
+                            relativeRocketPos = -gravityDirection;//ï¿½Oï¿½ï¿½ï¿½Ì”ï¿½ï¿½aï¿½Æ‚È‚ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½Ìæ“¾
+                            speed = delta.magnitude * orbitSpeedBounus;//ï¿½ï¿½ï¿½ï¿½ï¿½ÌŒvï¿½Z
+                            saveVelocity = rb.velocity;//ï¿½ï¿½ï¿½xï¿½Ì•Û‘ï¿½
+                            rb.velocity = Vector3.zero;//Rigidbodyï¿½Ì‹@ï¿½\ï¿½ï¿½~
+                            rightAround = true;//ï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½è”»ï¿½ï¿½ON
+                            orbitCenter = planetObject;
+                        }
+                        if (rightAround == true)//ï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½s
+                        {
+                            Debug.Log(relativeRocketPos.magnitude);
+                            float rotateSpeed = Mathf.Rad2Deg * (speed / relativeRocketPos.magnitude);//ï¿½pï¿½ï¿½ï¿½xï¿½ÌŒvï¿½Z                         
+                            relativeRocketPos = Quaternion.Euler(0, -rotateSpeed * Time.deltaTime , 0) * relativeRocketPos;//ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½Ì‰ï¿½]
+                            Vector3 rocketPos = relativeRocketPos + orbitCenter.transform.position;//ï¿½ï¿½ï¿½Pï¿½bï¿½gï¿½ÌˆÊ’uï¿½ï¿½ï¿½ï¿½
+                            this.gameObject.transform.position = rocketPos;//ï¿½ï¿½]ï¿½Ìï¿½ï¿½s
+                            nowPosition = rocketPos;
+                            /*
+                            myTransform.RotateAround(PlanetPos, Vector3.up, -rotateSpeed * Time.deltaTime);//ï¿½ï¿½]ï¿½Ìï¿½ï¿½s
+                            myTransform.position += planet.plaDelta;
+                            */
+                        }
+
+                        if (angle < -90 && inOrbit == false) //ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½
+                        {
+                            relativeRocketPos = -gravityDirection;//ï¿½Oï¿½ï¿½ï¿½Ì”ï¿½ï¿½aï¿½Æ‚È‚ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½Ìæ“¾
+                            speed = delta.magnitude * orbitSpeedBounus;//ï¿½ï¿½ï¿½ï¿½ï¿½ÌŒvï¿½Z
+                            saveVelocity = rb.velocity;//ï¿½ï¿½ï¿½xï¿½Ì•Û‘ï¿½
+                            rb.velocity = Vector3.zero;//Rigidbodyï¿½Ì‹@ï¿½\ï¿½ï¿½~
+                            leftAround = true;//ï¿½ï¿½ï¿½vï¿½ï¿½è”»ï¿½ï¿½ON
+                            orbitCenter = planetObject;
+                        }
+                        if (leftAround == true)
+                        {
+                            float rotateSpeed = Mathf.Rad2Deg * (speed / relativeRocketPos.magnitude);//ï¿½pï¿½ï¿½ï¿½xï¿½ÌŒvï¿½Z
+                            relativeRocketPos = Quaternion.Euler(0, rotateSpeed * Time.deltaTime, 0) * relativeRocketPos;//ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½Ì‰ï¿½]
+                            Vector3 rocketPos = relativeRocketPos + orbitCenter.transform.position;//ï¿½ï¿½ï¿½Pï¿½bï¿½gï¿½ÌˆÊ’uï¿½ï¿½ï¿½ï¿½
+                            this.gameObject.transform.position = rocketPos;//ï¿½ï¿½]ï¿½Ìï¿½ï¿½s
+                            nowPosition = rocketPos;
+                            /*
+                            myTransform.RotateAround(PlanetPos, Vector3.up, rotateSpeed * Time.deltaTime);//ï¿½ï¿½]ï¿½Ìï¿½ï¿½s
+                            myTransform.position += planet.plaDelta;
+                            */
+                        }
                     }
-                    if (leftAround == true)
+                    else if (!inOrbit)
                     {
-                        float rotateSpeed = Mathf.Rad2Deg * (speed / GravityLength);//Šp‘¬“x‚ÌŒvZ
-                        relativeRocketPos = Quaternion.Euler(0, rotateSpeed * Time.deltaTime, 0) * relativeRocketPos;//ƒxƒNƒgƒ‹‚Ì‰ñ“]
-                        Vector3 rocketPos = relativeRocketPos + planetObject.transform.position;//ƒƒPƒbƒg‚ÌˆÊ’uŒˆ’è
-                        this.gameObject.transform.position = rocketPos;//‰ñ“]‚ÌÀs
-                        NowPosition = rocketPos;
+                        //ï¿½Oï¿½ï¿½ï¿½Ìê‡
+                        Debug.Log("Outside");
+                        //ï¿½dï¿½Í‚ï¿½^ï¿½ï¿½ï¿½ï¿½
+                        rb.AddForce(GravityForth);
                     }
-                }
-                else
-                {
-                    //ŠO‘¤‚Ìê‡
-                    //Debug.Log("Outside");                
-                    //d—Í‚ğ—^‚¦‚é
-                    rb.AddForce(GravityForth);
                 }
 
             }
         }
+    }
+    private IEnumerator antiHorizon(Vector3 horizonMove)//ï¿½ï¿½ï¿½Ú“ï¿½ï¿½Ì’ï¿½~ 
+    {
+        yield return new WaitForSeconds(0.5f);
+        rb.AddForce(-horizonMove);//ï¿½ï¿½ï¿½Ú“ï¿½ï¿½Ì’ï¿½~ï¿½Ìï¿½ï¿½s
+        yield return new WaitForSeconds(0.1f);
+        emergencyAvoidance = false;//ï¿½ï¿½ï¿½Ú“ï¿½ï¿½ï¿½ï¿½ï¿½off
+    }
+    private void cooldown()//spï¿½ï¿½ï¿½ï¿½Nï¿½[ï¿½ï¿½ï¿½_ï¿½Eï¿½ï¿½ï¿½ï¿½ï¿½
+    {
+        spCooldown = false;
+    }
+
+    void OnCollisionEnter(Collision collision)//ï¿½Õ“Ë”ï¿½ï¿½ï¿½
+    {
+        Debug.Log("CrashExprosion!");//ï¿½ï¿½
+        Instantiate(explosionPrefab, this.transform.position, Quaternion.identity);
+        this.gameObject.transform.DetachChildren();
+        Destroy(this.gameObject);
     }
 }
