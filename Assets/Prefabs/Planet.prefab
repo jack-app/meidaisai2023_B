@@ -125,4 +125,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mass: 1
-  orbitLevel1: 1
+  orbitLevel1: 60
