@@ -9,37 +9,79 @@ public class SubCamera : MonoBehaviour
     [SerializeField] private float up = 200f;
     [SerializeField] private float angle;
     [SerializeField] private RocketControl rc;
+    private bool timeReset;
+    private bool eTimeReset;
+    private float time;
+    private float eTime;
+    private Vector3 planetforcasPos;//位置変更の実行
+    private Quaternion planetAngle;
+
 
     public void CameraUpdate()
     {
-        if (rc.inOrbit == false)//軌道の外
+        Vector3 rToCenterDirection = obj.transform.position * (-1);//ロケットからの宇宙中心方向のベクトル
+        Vector3 rNlzDirection = rToCenterDirection.normalized;//単位ベクトル化
+        Vector3 rBackposition = obj.transform.position + (back * rNlzDirection);//カメラのロケット後方位置
+        Vector3 rocketforcasPos = new Vector3(rBackposition.x, up, rBackposition.z);//位置変更の実行
+
+        float rCenterAngle = Vector3.Angle(obj.transform.position, Vector3.forward);//カメラ角度の決定
+        var rCameraAxis = Vector3.Cross(obj.transform.position, Vector3.forward).y < 0 ? -1 : 1;
+        var rNormalizedAngle = Mathf.Repeat(-rCenterAngle * rCameraAxis, 360);
+        Quaternion rocketAngle = Quaternion.Euler(angle, rNormalizedAngle, 0f);
+
+
+        time += Time.deltaTime;
+        eTime += Time.deltaTime;
+
+        if (rc.inOrbit)
         {
-            Vector3 centerDirection = obj.transform.position * (-1);//ロケットからの宇宙中心方向のベクトル
-            Vector3 nlzDirection = centerDirection.normalized;//単位ベクトル化
-            Vector3 backposition = obj.transform.position + (back * nlzDirection);//カメラのロケット後方位置
-            this.transform.position = new Vector3(backposition.x, up, backposition.z);//位置変更の実行
-            float　centerAngle = Vector3.Angle(obj.transform.position, Vector3.forward);//カメラ角度の決定
-            var cameraAxis = Vector3.Cross(obj.transform.position, Vector3.forward).y < 0 ? -1 : 1;
-            var normalizedAngle = Mathf.Repeat(-centerAngle * cameraAxis, 360);
-            this.transform.rotation = Quaternion.Euler(angle, normalizedAngle, 0.0f);//カメラ角度変更の実行
-            
+            eTimeReset = false;
+            if (!timeReset)
+            {
+                time = 0f;
+                timeReset = true;
+            }
+            else
+            {
+                Vector3 planetPos = rc.orbitCenter.transform.position;//惑星の位置
+                Vector3 pToCenterDirection = planetPos * (-1);//惑星からの宇宙中心方向のベクトル
+                Vector3 pNlzDirection = pToCenterDirection.normalized;//単位ベクトル化
+                Vector3 pBackposition = planetPos + (back * pNlzDirection);//カメラの惑星後方位置
+                planetforcasPos = new Vector3(pBackposition.x, up, pBackposition.z);//位置変更の実行
 
+                float pCenterAngle = Vector3.Angle(planetPos, Vector3.forward);//カメラ角度の決定
+                var pCameraAxis = Vector3.Cross(planetPos, Vector3.forward).y < 0 ? -1 : 1;
+                var pNormalizedAngle = Mathf.Repeat(-pCenterAngle * pCameraAxis, 360);
+                planetAngle = Quaternion.Euler(angle, pNormalizedAngle, 0f);
+
+                float inot = System.Math.Min(time / 1, 1);
+                transform.position = Vector3.Lerp(rocketforcasPos, planetforcasPos, inot);
+                transform.rotation = Quaternion.Lerp(rocketAngle, planetAngle, inot);
+            }
         }
-        if (rc.inOrbit == true)//軌道の内
+        else if (rc.escape)
         {
-            Debug.Log(rc.orbitCenter.name);
-            Vector3 planetPos = rc.orbitCenter.transform.position;//惑星の位置
-            Vector3 centerDirection = planetPos * (-1);//惑星からの宇宙中心方向のベクトル
-            Vector3 nlzDirection = centerDirection.normalized;//単位ベクトル化
-            Vector3 backposition = planetPos + (back * nlzDirection);//カメラの惑星後方位置
-            this.transform.position = new Vector3(backposition.x, up, backposition.z);//位置変更の実行
-            float centerAngle = Vector3.Angle(planetPos, Vector3.forward);//カメラ角度の決定
-            var cameraAxis = Vector3.Cross(planetPos, Vector3.forward).y < 0 ? -1 : 1;
-            var normalizedAngle = Mathf.Repeat(-centerAngle * cameraAxis, 360);
-            this.transform.rotation = Quaternion.Euler(angle, normalizedAngle, 0.0f);//カメラ角度変更の実行
-
+            timeReset = false;
+            if (!eTimeReset)
+            {
+                time = 0f;
+                eTimeReset = true;
+            }
+            else
+            {
+                Debug.Log(planetAngle);
+                float esct = System.Math.Min(time / rc.compleatEscapeTime, 1);
+                transform.position = Vector3.Lerp(planetforcasPos, rocketforcasPos, esct);
+                transform.rotation = Quaternion.Lerp(planetAngle, rocketAngle, esct);
+            }
         }
-
+        else
+        {
+            timeReset = false;
+            eTimeReset = false;
+            transform.position = rocketforcasPos;
+            this.transform.rotation = Quaternion.Euler(angle, rNormalizedAngle, 0.0f);//カメラ角度変更の実行
+        }
     }
 }
     
