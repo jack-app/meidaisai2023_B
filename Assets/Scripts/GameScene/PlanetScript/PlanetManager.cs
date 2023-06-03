@@ -53,7 +53,7 @@ public class PlanetManager : MonoBehaviour
         foreach (Planet planet in planetList)
         {
             if (planet.orbitRadius >= rocketDistance) break;
-            destroyIndex.Insert(0, planetList.IndexOf(planet));
+            //destroyIndex.Insert(0, planetList.IndexOf(planet));
         }
         foreach (int num in destroyIndex)
         {
