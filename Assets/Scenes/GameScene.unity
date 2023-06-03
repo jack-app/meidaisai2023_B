@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.0031563276, g: 0.0027327389, b: 0.0033656592, a: 1}
+  m_IndirectSpecularColor: {r: 0.003104224, g: 0.0027308352, b: 0.0033082762, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -624,7 +624,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &308044264
 RectTransform:
   m_ObjectHideFlags: 0
@@ -748,10 +748,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pausePanel: {fileID: 308044263}
   resultPanel: {fileID: 2141539156}
-  resumeButton: {fileID: 0}
-  finishInPause: {fileID: 0}
-  finishInResult: {fileID: 0}
-  continueButton: {fileID: 0}
   score: {fileID: 235360300}
 --- !u!1 &705507993
 GameObject:
