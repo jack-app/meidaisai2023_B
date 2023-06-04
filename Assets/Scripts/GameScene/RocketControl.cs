@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class RocketControl : MonoBehaviour
 {
-    List<GameObject> colList = new List<GameObject>();
+    [SerializeField] private GameManager gameManager = null!;
     [SerializeField] private float GravityCoefficient;//���L���͒萔
     [SerializeField] private float startDash;//�����x
     [SerializeField] private float escapeTime;//���E�����܂ł̎���
@@ -30,6 +31,7 @@ public class RocketControl : MonoBehaviour
     public Vector3 saveVelocity; // ���x�x�N�g���̕ۑ�
     public Vector3 PlanetPos; // �f���̈ʒu
     public Vector3 delta; // ���P�b�g�̑��x�x�N�g��
+    private List<GameObject> colList = new List<GameObject>();
     public Vector3 nowPosition { get; private set; } // ���̃��P�b�g�̈ʒu
     public float compleatEscapeTime { get; private set; }
     private Rigidbody rb;
@@ -52,6 +54,15 @@ public class RocketControl : MonoBehaviour
     private Vector3 relativeRocketPos;
     private float rotateSpeed;
     private float chargePower;
+
+    public bool InGravity()
+    {
+        return colList.Any();
+    }
+    public float FuelAmount()
+    {
+        return fuel;
+    }
 
     // Start is called before the first frame update
     private void Start()
@@ -80,6 +91,7 @@ public class RocketControl : MonoBehaviour
 
     public void RocketDestroy()
     {
+        gameManager.StartGameFinish((long)nowPosition.magnitude);
         crash = true;
         mainCamera.SetActive(true);
         subCamera.SetActive(false);
