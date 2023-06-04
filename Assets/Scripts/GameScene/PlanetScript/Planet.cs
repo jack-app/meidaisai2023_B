@@ -27,7 +27,7 @@ public class Planet : MonoBehaviour
 
     public void Destrroy()
     {
-        Destroy(this.gameObject);
-        Destroy(this);
+        //Destroy(this.gameObject);
+        //Destroy(this);
     }
 }

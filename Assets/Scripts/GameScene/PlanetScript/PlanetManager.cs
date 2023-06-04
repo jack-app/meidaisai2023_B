@@ -11,7 +11,7 @@ public class PlanetManager : MonoBehaviour
 
     private void Spawn()
     {
-        if (random.Next(100) <= 1)
+        if (random.Next(100) <= 2)
         {
             Planet planet = Instantiate(planetPrefab, planetParent.transform);
             planetList.Add(planet);
@@ -50,7 +50,7 @@ public class PlanetManager : MonoBehaviour
         List<int> destroyIndex = new List<int>();
         foreach (Planet planet in planetList)
         {
-            if (planet.orbitRadius + 100 >= rocketDistance) break;
+            if (planet.orbitRadius >= rocketDistance) break;
             destroyIndex.Insert(0, planetList.IndexOf(planet));
         }
         foreach (int num in destroyIndex)

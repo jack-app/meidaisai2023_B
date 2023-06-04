@@ -14,8 +14,9 @@ GameObject:
   - component: {fileID: 706485091540730034}
   - component: {fileID: 706485091540730035}
   - component: {fileID: 2617456007389463383}
+  - component: {fileID: 789260702359034154}
   m_Layer: 0
-  m_Name: Planet
+  m_Name: BomPlanet
   m_TagString: Planet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -64,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 7da0d403d4fb0da40ac018d557c6db89, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -126,3 +127,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mass: 1
   orbitLevel1: 120
+--- !u!114 &789260702359034154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 706485091540730038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b1158c03eb59ff4a97e2005059d0597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bomTimer: 3
+  explosionPrefab: {fileID: 100000, guid: 2a6951ec14b27ed4da27d13818dbebd2, type: 3}

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.003104224, g: 0.0027308352, b: 0.0033082762, a: 1}
+  m_IndirectSpecularColor: {r: 0.0031535183, g: 0.0027272243, b: 0.0033603678, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -336,20 +336,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 348061091}
-  GravityCoefficient: 30000
   orbitSpeedBounus: 1
+  GravityCoefficient: 300000
   startDash: 5000
-  escapeTime: 2
-  maxCharge: 1.2
-  charge: 1.05
-  chargeSpeed: 0.03
-  exprosionCharge: 10
+  escapeTime: 0.1
+  maxCharge: 100
+  charge: 0
+  chargeSpeed: 0.01
+  exprosionCharge: 1.5
   fuel: 100
-  maxFuel: 100
-  spCooltime: 3
-  horizonSpeed: 30000
-  spFuel: 10
-  explosionPrefab: {fileID: 100000, guid: 5a5dc44bfe769d94ba1bcab91c5c3107, type: 3}
+  maxFuel: 120
+  fuelRecovery: 10
+  spCooltime: 2
+  spHorizonSpeed: 30000
+  spConsumeFuel: 20
+  horizonSpeed: 15
+  breakSpeed: 10
+  spAccelSpeed: 200
+  explosionPrefab: {fileID: 100000, guid: f600b4a5a289d0548842df7f27d883ea, type: 3}
+  autoCamera: 0
   inOrbit: 0
   leftAround: 0
   rightAround: 0
@@ -357,6 +362,7 @@ MonoBehaviour:
   PlanetPos: {x: 0, y: 0, z: 0}
   delta: {x: 0, y: 0, z: 0}
   orbitCenter: {fileID: 0}
+  escape: 0
 --- !u!114 &200922825
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -809,13 +815,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 348061090}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -39.032127, y: 2980.756, z: 5436.431}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -39.032135, y: 2980.7563, z: 5436.431}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &348061093
 MonoBehaviour:
@@ -979,7 +985,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 10000
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -1026,7 +1032,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   obj: {fileID: 200922809}
-  back: 350
+  back: 500
   up: 400
   angle: 30
   rc: {fileID: 200922819}
@@ -1255,7 +1261,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 51
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -1450,8 +1456,8 @@ GameObject:
   - component: {fileID: 1042364437}
   - component: {fileID: 1042364440}
   - component: {fileID: 1042364439}
-  m_Layer: 0
-  m_Name: Cylinder
+  m_Layer: 2
+  m_Name: DirectionSign
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1465,8 +1471,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1042364436}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 100}
-  m_LocalScale: {x: 0.1, y: 100, z: 0.10000001}
+  m_LocalPosition: {x: 0, y: -1, z: 100}
+  m_LocalScale: {x: 1, y: 100, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 200922816}
@@ -1761,6 +1767,10 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 9eafec2478441af418574f3e9e971f8d, type: 3}
       propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 9eafec2478441af418574f3e9e971f8d, type: 3}
+      propertyPath: m_LocalScale.x
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9eafec2478441af418574f3e9e971f8d, type: 3}
