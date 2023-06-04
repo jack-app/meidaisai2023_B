@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
         float rocketDistance = rocketControl.nowPosition.magnitude;
         bool _inOrbit = rocketControl.inOrbit;
         if (rocketControl.crash) return;
-        if(!_inOrbit && rocketControl.InGravity()) planetManager.PlanetDestroy(rocketDistance);
+        if(!_inOrbit && !rocketControl.InGravity()) planetManager.PlanetDestroy(rocketDistance);
         planetManager.PlanetSpawn(rocketDistance);
         planetManager.PlanetMove();
         rocketControl.RocketUpdate();
