@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        uiManager.UIUpdate((long)rocketControl.nowPosition.magnitude);
+        uiManager.UIUpdate((long)rocketControl.nowPosition.magnitude, rocketControl.FuelAmount());
     }
 
     void FixedUpdate()

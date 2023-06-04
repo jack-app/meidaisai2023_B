@@ -48,6 +48,10 @@ public class RocketControl : MonoBehaviour
     {
         return colList.Any();
     }
+    public float FuelAmount()
+    {
+        return fuel;
+    }
 
     // Start is called before the first frame update
     private void Start()

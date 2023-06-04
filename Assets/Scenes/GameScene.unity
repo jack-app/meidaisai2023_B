@@ -833,6 +833,7 @@ MonoBehaviour:
   resultPanel: {fileID: 2141539156}
   scoreText: {fileID: 107763986}
   resultScoreText: {fileID: 235360300}
+  fuelSlider: {fileID: 823353695}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
