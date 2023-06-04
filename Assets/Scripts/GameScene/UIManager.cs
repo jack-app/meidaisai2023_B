@@ -6,7 +6,8 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] private GameObject pausePanel = null!;
     [SerializeField] private GameObject resultPanel = null!;
-    [SerializeField] private Text score = null!;
+    [SerializeField] private Text scoreText = null!;
+    [SerializeField] private Text resultScoreText = null!;
     private bool pause = false;
     private bool result = false;
 
@@ -36,14 +37,17 @@ public class UIManager : MonoBehaviour
         SceneManager.LoadScene("StartScene");
     }
 
-    public void Result()
+    public void Result(long score)
     {
         Time.timeScale = 0f;
+        resultPanel.gameObject.SetActive(true);
+        resultScoreText.text = "Your score : " + score.ToString();
         result = true;
     }
 
-    void Update()
+    public void UIUpdate(long score)
     {
+        scoreText.text = score.ToString();
         if (Input.GetKey(KeyCode.P))
         {
             Pause();

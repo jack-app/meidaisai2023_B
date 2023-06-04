@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class RocketControl : MonoBehaviour
 {
-    List<GameObject> colList = new List<GameObject>();
+    [SerializeField] private GameManager gameManager = null!;
     [SerializeField] private float GravityCoefficient;//���L���͒萔
     [SerializeField] private float orbitSpeedBounus;//�O���˓����̃X�s�[�h��UP���o�̔{��
     [SerializeField] private float startDash;//�����x
@@ -26,11 +27,12 @@ public class RocketControl : MonoBehaviour
     public Vector3 saveVelocity; // ���x�x�N�g���̕ۑ�
     public Vector3 PlanetPos; // �f���̈ʒu
     public Vector3 delta; // ���P�b�g�̑��x�x�N�g��
+    public GameObject orbitCenter;
     public Vector3 nowPosition { get; private set; } // ���̃��P�b�g�̈ʒu
+    private List<GameObject> colList = new List<GameObject>();
     private Rigidbody rb;
     private Transform myTransform;
     private GameObject planetObject;
-    public GameObject orbitCenter;
     private Planet planet;
     private bool start = false; // �X�^�[�g�������̔���
     private bool escape = false; // �O������̗��E������
@@ -41,6 +43,11 @@ public class RocketControl : MonoBehaviour
     private float mass = 1; // �f���̎���
     private float speed; // ���P�b�g�̑���
     private Vector3 relativeRocketPos;
+
+    public bool InGravity()
+    {
+        return colList.Any();
+    }
 
     // Start is called before the first frame update
     private void Start()
@@ -65,6 +72,7 @@ public class RocketControl : MonoBehaviour
 
     private void RocketDestroy()
     {
+        gameManager.StartGameFinish((long)nowPosition.magnitude);
         crash = true;
         Instantiate(explosionPrefab, this.transform.position, Quaternion.identity);
         this.gameObject.transform.DetachChildren();
