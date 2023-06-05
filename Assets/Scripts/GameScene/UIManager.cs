@@ -8,6 +8,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject resultPanel = null!;
     [SerializeField] private Text scoreText = null!;
     [SerializeField] private Text resultScoreText = null!;
+    [SerializeField] private Text speedText = null!;
     [SerializeField] private Slider fuelSlider = null!;
     private bool pause = false;
     private bool result = false;
@@ -46,10 +47,11 @@ public class UIManager : MonoBehaviour
         result = true;
     }
 
-    public void UIUpdate(long score, float fuel)
+    public void UIUpdate(long score, float fuel, float speed)
     {
         fuelSlider.value = fuel;
         scoreText.text = score.ToString();
+        speedText.text = "Speed : " + speed.ToString();
         if (Input.GetKey(KeyCode.P))
         {
             Pause();

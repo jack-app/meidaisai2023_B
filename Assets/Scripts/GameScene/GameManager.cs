@@ -8,16 +8,17 @@ public class GameManager : MonoBehaviour
     [SerializeField] private PlanetManager planetManager = null!;
     [SerializeField] private SubCamera subCamera = null!;
     [SerializeField] private UIManager uiManager = null!;
+    private long score;
 
     void Start()
     {
         Application.targetFrameRate = 60;
-        planetManager.FirstSpawn();
     }
 
     private void Update()
     {
-        uiManager.UIUpdate((long)rocketControl.nowPosition.magnitude, rocketControl.FuelAmount());
+        score = score > (long)rocketControl.nowPosition.magnitude ? score : (long)rocketControl.nowPosition.magnitude;
+        uiManager.UIUpdate(score, rocketControl.FuelAmount(), rocketControl.delta.magnitude);
     }
 
     void FixedUpdate()
@@ -32,16 +33,15 @@ public class GameManager : MonoBehaviour
         subCamera.CameraUpdate();
     }
 
-    public void StartGameFinish(long score)
+    public void StartGameFinish()
     {
-        StartCoroutine(GameFinish(score));
+        StartCoroutine(GameFinish());
     }
 
 
-    private IEnumerator GameFinish(long score)
+    private IEnumerator GameFinish()
     {
-        long finalScore = score;
         yield return new WaitForSecondsRealtime(5f);
-        uiManager.Result(finalScore);
+        uiManager.Result(score);
     }
 }

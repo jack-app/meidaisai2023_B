@@ -3,37 +3,52 @@ using UnityEngine;
 
 public class PlanetManager : MonoBehaviour
 {
-    private List<Planet> planetList = new List<Planet>();
     [SerializeField] private Planet planetPrefab = null!;
+    [SerializeField] private Planet bomPlanetPrefab = null!;
     [SerializeField] private GameObject planetParent = null!;
+    private List<Planet> planetList = new List<Planet>();
     private int minSpawnableRange = 300;
     private System.Random random = new System.Random();
 
+    private void Spawn(int spawnCount)
+    {
+        int deg = 360 / spawnCount;
+        int firstDeg = random.Next(0, 360);
+        int maxPlanet = 0;
+        for (int count = 0; count < spawnCount; count++)
+        {
+            Planet prefab = random.Next(100) <= 50 ? bomPlanetPrefab : planetPrefab;
+            Planet planet = Instantiate(prefab, planetParent.transform);
+            planetList.Add(planet);
+            int planetSize = planet.Initialize(minSpawnableRange, firstDeg + deg * count);
+            maxPlanet = maxPlanet < planetSize ? planetSize : maxPlanet;
+        }
+        minSpawnableRange += maxPlanet;
+    }
     private void Spawn()
     {
-        if (random.Next(100) <= 2)
-        {
-            Planet planet = Instantiate(planetPrefab, planetParent.transform);
-            planetList.Add(planet);
-            int planetSize = planet.Initialize(minSpawnableRange);
-            minSpawnableRange += planetSize;
-        }
-        minSpawnableRange++;
+        Planet prefab = random.Next(100) <= 50 ? bomPlanetPrefab : planetPrefab;
+        Planet planet = Instantiate(prefab, planetParent.transform);
+        planetList.Add(planet);
+        int planetSize = planet.Initialize(minSpawnableRange);
+        minSpawnableRange += planetSize;
     }
 
-    public void FirstSpawn()
-    {
-        while (minSpawnableRange <= 10000)
-        {
-            Spawn();
-        }
-    }
 
     public void PlanetSpawn(float rocketDistance)
     {
         while (minSpawnableRange <= rocketDistance + 10000)
         {
-            Spawn();
+            if (random.Next(100) <= 2) //¶¬‚·‚é‚©”»’è
+            {
+                int spawnCount = 1;
+                if (random.Next(100) <= Mathf.Pow(rocketDistance, 1f / 4f)) spawnCount++;
+                else Spawn();
+                if (random.Next(1000) <= Mathf.Pow(rocketDistance, 1f / 4f)) spawnCount++;
+                if (random.Next(10000) <= Mathf.Pow(rocketDistance, 1f / 4f)) spawnCount++;
+                Spawn(spawnCount);
+            }
+            else minSpawnableRange++;
         }
     }
 
@@ -43,6 +58,11 @@ public class PlanetManager : MonoBehaviour
         {
             planet.Move();
         }
+    }
+
+    public void RemovePlanetForList(Planet planet)
+    {
+        planetList.Remove(planet);
     }
 
     public void PlanetDestroy(float rocketDistance)

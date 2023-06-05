@@ -31,19 +31,18 @@ public class RocketControl : MonoBehaviour
     public Vector3 saveVelocity; // ���x�x�N�g���̕ۑ�
     public Vector3 PlanetPos; // �f���̈ʒu
     public Vector3 delta; // ���P�b�g�̑��x�x�N�g��
-    private List<GameObject> colList = new List<GameObject>();
     public Vector3 nowPosition { get; private set; } // ���̃��P�b�g�̈ʒu
     public float compleatEscapeTime { get; private set; }
+    public GameObject orbitCenter;
+    public bool escape = false; // �O������̗��E������
+    private List<GameObject> colList = new List<GameObject>();
     private Rigidbody rb;
     private Transform myTransform;
-    private GameObject planetObject;
-    public GameObject orbitCenter;
     private GameObject mainCamera;
     private GameObject subCamera;
     private GameObject ds;
     private Planet planet;
     private bool start = false; // �X�^�[�g�������̔���
-    public bool escape = false; // �O������̗��E������
     private bool emergencyAvoidance = false;//���ړ�������
     private bool spCooldown = false;//sp����̃N�[���_�E������
     private Vector3 prePosition; // 1�t���[���O�̃��P�b�g�̈ʒu
@@ -58,6 +57,11 @@ public class RocketControl : MonoBehaviour
     public bool InGravity()
     {
         return colList.Any();
+    }
+    public void RemovePlanetFromColList(GameObject obj)
+    {
+        colList.Remove(obj);
+        Debug.Log("called Remove Planet From ColList");
     }
     public float FuelAmount()
     {
@@ -85,13 +89,13 @@ public class RocketControl : MonoBehaviour
     //�O������E�o����
     void CompleatEscape()
     {
-        Debug.Log("CompleatEscape");
+        //Debug.Log("CompleatEscape");
         escape = false;
     }
 
     public void RocketDestroy()
     {
-        gameManager.StartGameFinish((long)nowPosition.magnitude);
+        gameManager.StartGameFinish();
         crash = true;
         mainCamera.SetActive(true);
         subCamera.SetActive(false);
@@ -121,7 +125,8 @@ public class RocketControl : MonoBehaviour
         }
         if(fuel <= 0)
         {
-            Debug.Log("Finish!");
+            //Debug.Log("Finish!");
+            RocketDestroy();
         }
         fuel = Mathf.Clamp(fuel, 0, maxFuel);//fuel�̍ŏ��l�ő�l����
 
@@ -177,7 +182,7 @@ public class RocketControl : MonoBehaviour
 
         if (inOrbit)//�O���̒��ł̑���
         {
-            Debug.Log("inOrbit");
+            //Debug.Log("inOrbit");
 
             chargePower = System.Math.Min(charge, 1);//charge�̍ő�l����
             float escapeSpeed = saveVelocity.magnitude;//�O�����E���̑���
@@ -202,7 +207,7 @@ public class RocketControl : MonoBehaviour
             }
             if(charge > exprosionCharge)//charge���������Ƃ����j
             {
-                Debug.Log("Explosion!");//��
+                //Debug.Log("Explosion!");//��
                 RocketDestroy();
             }
         }
@@ -235,7 +240,7 @@ public class RocketControl : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision) //�Ԃ������Ƃ�
     {
-        Debug.Log("CrashExprosion!");//��
+        //Debug.Log("CrashExprosion!");//��
         RocketDestroy();
     }
 
@@ -268,10 +273,11 @@ public class RocketControl : MonoBehaviour
             {
                 foreach (GameObject planetObject in colList)
                 {
+                    Debug.Log(planetObject);
                     planet = planetObject.GetComponent<Planet>();
                     mass = planet.mass;
                     orbitalRadius = planet.orbitLevel1;
-                    Debug.Log(colList.Count);
+                    //Debug.Log(colList.Count);
                     //�d��
                     //�߂Â����f���̍��W�̎擾
                     PlanetPos = planetObject.transform.position;
@@ -358,7 +364,7 @@ public class RocketControl : MonoBehaviour
                     else if (!inOrbit)
                     {
                         //�O���̏ꍇ
-                        Debug.Log("Outside");
+                        //Debug.Log("Outside");
                         //�d�͂�^����
                         rb.AddForce(GravityForth);
                     }
