@@ -39,7 +39,6 @@ public class RocketControl : MonoBehaviour
     public Vector3 nowPosition { get; private set; } // ���̃��P�b�g�̈ʒu
     public float compleatEscapeTime { get; private set; }
     public GameObject orbitCenter;
-    public bool escape = false; // �O������̗��E������
     private List<GameObject> colList = new List<GameObject>();
     private Rigidbody rb;
     private Transform myTransform;
