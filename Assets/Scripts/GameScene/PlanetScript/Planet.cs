@@ -20,7 +20,7 @@ public class Planet : MonoBehaviour
     }
     public int Initialize(int orbitRadius, int randomDeg)
     {
-        int planetRadius = random.Next(30, 90);
+        int planetRadius = random.Next(30, 150);
         this.orbitRadius = orbitRadius + planetRadius / 2;
         this.transform.localScale = new Vector3(planetRadius, planetRadius, planetRadius);
         this.transform.position = new Vector3(orbitRadius * (float)Math.Cos(randomDeg * Math.PI / 180), 0, this.orbitRadius * (float)Math.Sin(randomDeg * Math.PI / 180));

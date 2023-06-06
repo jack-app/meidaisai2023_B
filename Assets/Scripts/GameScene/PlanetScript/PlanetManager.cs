@@ -7,7 +7,7 @@ public class PlanetManager : MonoBehaviour
     [SerializeField] private Planet bomPlanetPrefab = null!;
     [SerializeField] private GameObject planetParent = null!;
     private List<Planet> planetList = new List<Planet>();
-    private int minSpawnableRange = 300;
+    private int minSpawnableRange = 500;
     private System.Random random = new System.Random();
 
     private void Spawn(int spawnCount)
@@ -39,13 +39,13 @@ public class PlanetManager : MonoBehaviour
     {
         while (minSpawnableRange <= rocketDistance + 10000)
         {
-            if (random.Next(100) <= 2) //¶¬‚·‚é‚©”»’è
+            if (random.Next(100) <= 3 && random.Next(100) < Mathf.Pow(minSpawnableRange, 1f/3f)) //¶¬‚·‚é‚©”»’è
             {
                 int spawnCount = 1;
-                if (random.Next(100) <= Mathf.Pow(rocketDistance, 1f / 4f)) spawnCount++;
+                if (random.Next(100) <= Mathf.Pow(minSpawnableRange, 1f / 4f)) spawnCount++;
                 else Spawn();
-                if (random.Next(1000) <= Mathf.Pow(rocketDistance, 1f / 4f)) spawnCount++;
-                if (random.Next(10000) <= Mathf.Pow(rocketDistance, 1f / 4f)) spawnCount++;
+                if (random.Next(1000) <= Mathf.Pow(minSpawnableRange, 1f / 4f)) spawnCount++;
+                if (random.Next(10000) <= Mathf.Pow(minSpawnableRange, 1f / 4f)) spawnCount++;
                 Spawn(spawnCount);
             }
             else minSpawnableRange++;
