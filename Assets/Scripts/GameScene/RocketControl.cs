@@ -36,13 +36,13 @@ public class RocketControl : MonoBehaviour
     public Vector3 PlanetPos; // �f���̈ʒu
     public Vector3 delta; // ���P�b�g�̑��x�x�N�g��
     private Vector3 saveVelocity; // ���x�x�N�g���̕ۑ�
-    private List<GameObject> colList = new List<GameObject>();
     public Vector3 nowPosition { get; private set; } // ���̃��P�b�g�̈ʒu
     public float compleatEscapeTime { get; private set; }
+    public GameObject orbitCenter;
+    public bool escape = false; // �O������̗��E������
+    private List<GameObject> colList = new List<GameObject>();
     private Rigidbody rb;
     private Transform myTransform;
-    private GameObject planetObject;
-    public GameObject orbitCenter;
     private GameObject mainCamera;
     private GameObject subCamera;
     private GameObject ds;
@@ -71,6 +71,11 @@ public class RocketControl : MonoBehaviour
     {
         return colList.Any();
     }
+    public void RemovePlanetFromColList(GameObject obj)
+    {
+        colList.Remove(obj);
+        Debug.Log("called Remove Planet From ColList");
+    }
     public float FuelAmount()
     {
         return fuel;
@@ -97,13 +102,13 @@ public class RocketControl : MonoBehaviour
     //�O������E�o����
     void CompleatEscape()
     {
-        Debug.Log("CompleatEscape");
+        //Debug.Log("CompleatEscape");
         escape = false;
     }
 
     public void RocketDestroy()
     {
-        gameManager.StartGameFinish((long)nowPosition.magnitude);
+        gameManager.StartGameFinish();
         crash = true;
         mainCamera.SetActive(true);
         subCamera.SetActive(false);
@@ -133,7 +138,8 @@ public class RocketControl : MonoBehaviour
         }
         if(fuel <= 0)
         {
-            Debug.Log("Finish!");
+            //Debug.Log("Finish!");
+            RocketDestroy();
         }
         fuel = Mathf.Clamp(fuel, 0, maxFuel);//fuel�̍ŏ��l�ő�l����
 
@@ -301,7 +307,7 @@ public class RocketControl : MonoBehaviour
             }
             if(charge > exprosionCharge)//charge���������Ƃ����j
             {
-                Debug.Log("Explosion!");//��
+                //Debug.Log("Explosion!");//��
                 RocketDestroy();
             }
         }
@@ -325,7 +331,7 @@ public class RocketControl : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision) //�Ԃ������Ƃ�
     {
-        Debug.Log("CrashExprosion!");//��
+        //Debug.Log("CrashExprosion!");//��
         RocketDestroy();
     }
 
@@ -353,6 +359,7 @@ public class RocketControl : MonoBehaviour
             {
                 foreach (GameObject planetObject in colList)
                 {
+                    Debug.Log(planetObject);
                     planet = planetObject.GetComponent<Planet>();
                     mass = planet.mass;
                     orbitalRadius = planet.orbitLevel1;
@@ -443,7 +450,7 @@ public class RocketControl : MonoBehaviour
                     else if (!inOrbit)
                     {
                         //�O���̏ꍇ
-                        Debug.Log("Outside");
+                        //Debug.Log("Outside");
                         //�d�͂�^����
                         rb.AddForce(GravityForth);
                     }

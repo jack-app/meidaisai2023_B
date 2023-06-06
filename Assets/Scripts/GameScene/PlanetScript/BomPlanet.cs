@@ -6,21 +6,35 @@ public class BomPlanet : MonoBehaviour
 {
     [SerializeField] private float bomTimer;
     [SerializeField] GameObject explosionPrefab;
-    private GameObject rocket;
+    private PlanetManager planetManager;
     private Planet planet;
     private RocketControl rocketControl;
+    private GameObject rocket;
     private bool timerOn = false;
+
+    private void PlanetDestroy()
+    {
+        planetManager.RemovePlanetForList(planet);
+        rocketControl.RemovePlanetFromColList(this.gameObject);
+        Instantiate(explosionPrefab, this.transform.position, Quaternion.identity);
+        Destroy(this.gameObject);
+        Destroy(this);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         rocket = GameObject.Find("Rocket");
+        planetManager = GameObject.Find("PlanetManager").GetComponent<PlanetManager>();
         rocketControl = rocket.GetComponent<RocketControl>();
         planet = GetComponent<Planet>();
     }
+
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        float distance = (this.transform.position - rocket.transform.position).magnitude;           
+        if (rocketControl.crash) return;
+        float distance = (this.transform.position - rocket.transform.position).magnitude;
         if(distance <= planet.orbitLevel1)
         {
             timerOn = true;
@@ -31,19 +45,15 @@ public class BomPlanet : MonoBehaviour
         }
         if(bomTimer <= 0)
         {
-            Instantiate(explosionPrefab, this.transform.position, Quaternion.identity);
             if (distance <= planet.orbitLevel1)
             {
                 rocketControl.RocketDestroy();
             }
-            Destroy(this.gameObject);
-            Destroy(this);
+            PlanetDestroy();
         }
     }
     private void OnCollisionEnter(Collision collision)
     {
-        Instantiate(explosionPrefab, this.transform.position, Quaternion.identity);
-        Destroy(this.gameObject);
-        Destroy(this);
+        PlanetDestroy();
     }
 }
