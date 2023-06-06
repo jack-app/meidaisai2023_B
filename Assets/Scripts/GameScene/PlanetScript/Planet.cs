@@ -8,10 +8,11 @@ public class Planet : MonoBehaviour
     private System.Random random = new System.Random();
     public long orbitRadius { get; private set; } // destroyで使う
 
-    private void VisualRangeSetActive()
+    private void VisualSetActive()
     {
         this.gameObject.transform.GetChild(0).gameObject.SetActive(GameManager.visualGravityExist);
         this.gameObject.transform.GetChild(1).gameObject.SetActive(GameManager.visualOrbitExist);
+        this.gameObject.GetComponent<TrailRenderer>().enabled = GameManager.planetTrajectoryExist;
     }
 
     // インスタンス化したときに呼び出される
@@ -22,6 +23,7 @@ public class Planet : MonoBehaviour
         int randomDeg = random.Next(360);
         this.transform.localScale = new Vector3(planetRadius, planetRadius, planetRadius);
         this.transform.position = new Vector3(orbitRadius * (float)Math.Cos(randomDeg * Math.PI / 180), 0, this.orbitRadius * (float)Math.Sin(randomDeg * Math.PI / 180));
+        VisualSetActive();
         return planetRadius;
     }
     public int Initialize(int orbitRadius, int randomDeg, bool large)
@@ -30,6 +32,7 @@ public class Planet : MonoBehaviour
         this.orbitRadius = orbitRadius + planetRadius / 2;
         this.transform.localScale = new Vector3(planetRadius, planetRadius, planetRadius);
         this.transform.position = new Vector3(orbitRadius * (float)Math.Cos(randomDeg * Math.PI / 180), 0, this.orbitRadius * (float)Math.Sin(randomDeg * Math.PI / 180));
+        VisualSetActive();
         return planetRadius;
     }
 
