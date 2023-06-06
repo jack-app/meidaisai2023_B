@@ -22,15 +22,20 @@ public class RocketControl : MonoBehaviour
     [SerializeField] private float horizonSpeed;//���ړ����x
     [SerializeField] private float breakSpeed;//���ړ����x
     [SerializeField] private float spAccelSpeed;
+    [SerializeField] private float maxAngleZ;
+    [SerializeField] private float spMaxAngleZ;
+    [SerializeField] private float rotationSpeedZ;
+    [SerializeField] private float antiRotationSpeedZ;
     [SerializeField] GameObject explosionPrefab;
     public bool autoCamera;
     public bool crash { get; private set; } = false;
     public bool inOrbit = false; // �O���ɏ���Ă邩�̔���
     public bool leftAround = false; // ���v���
     public bool rightAround = false; // �����v���
-    public Vector3 saveVelocity; // ���x�x�N�g���̕ۑ�
+    public bool escape = false; // �O������̗��E������
     public Vector3 PlanetPos; // �f���̈ʒu
     public Vector3 delta; // ���P�b�g�̑��x�x�N�g��
+    private Vector3 saveVelocity; // ���x�x�N�g���̕ۑ�
     public Vector3 nowPosition { get; private set; } // ���̃��P�b�g�̈ʒu
     public float compleatEscapeTime { get; private set; }
     public GameObject orbitCenter;
@@ -45,6 +50,7 @@ public class RocketControl : MonoBehaviour
     private bool start = false; // �X�^�[�g�������̔���
     private bool emergencyAvoidance = false;//���ړ�������
     private bool spCooldown = false;//sp����̃N�[���_�E������
+    private bool spAngleCount = false;
     private Vector3 prePosition; // 1�t���[���O�̃��P�b�g�̈ʒu
     private float orbitalRadius;
     private float escapeOrbitalRadius;// �O�����a
@@ -53,6 +59,13 @@ public class RocketControl : MonoBehaviour
     private Vector3 relativeRocketPos;
     private float rotateSpeed;
     private float chargePower;
+    private float angleChangeTime;
+    public float rotationZ { get; private set; }
+    private float carrentRotationZ;
+    private float spAngleChangeTime;
+    private float spAngleChangeRatio;
+    private float spAngleZ;
+    private float horizonInput;
 
     public bool InGravity()
     {
@@ -130,6 +143,46 @@ public class RocketControl : MonoBehaviour
         }
         fuel = Mathf.Clamp(fuel, 0, maxFuel);//fuel�̍ŏ��l�ő�l����
 
+        spAngleChangeTime += Time.deltaTime;
+        spAngleChangeRatio = spAngleChangeTime / 0.2f;
+        spAngleChangeRatio = Mathf.Clamp(spAngleChangeRatio, 0, 1);
+        if(emergencyAvoidance)
+        {
+            
+            if(spAngleCount)
+            {
+                rotationZ = Mathf.Lerp(carrentRotationZ, spAngleZ, spAngleChangeRatio);
+                if (spAngleChangeRatio >= 1)
+                {
+                    spAngleCount = false;
+                    spAngleChangeTime = 0;
+                }
+            }
+            else
+            {
+                rotationZ = Mathf.Lerp(spAngleZ, 0, spAngleChangeRatio);
+            }
+            myTransform.rotation = Quaternion.Euler(0, myTransform.localEulerAngles.y, rotationZ);
+            
+        }
+        else
+        {
+            rotationZ = maxAngleZ * angleChangeTime;//ロケットの傾き
+            var rocketAngle = Vector3.Angle(delta, Vector3.forward);
+            var rocketAxis = Vector3.Cross(delta, Vector3.forward).y < 0 ? -1 : 1;
+            var normalizedAngle = Mathf.Repeat(-rocketAngle * rocketAxis, 360);
+            myTransform.rotation = Quaternion.Euler(0, normalizedAngle, rotationZ);
+            //Debug.Log(normalizedAngle);
+        }
+        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+        {
+            horizonInput = 1;
+        }
+        else if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+        {
+            horizonInput = -1;
+        }
+
         Vector3 forward = myTransform.forward;//���ʕ����̃x�N�g��
         Vector3 moveDirection = delta.normalized; //�ړ������̒P�ʃx�N�g��
         if (!inOrbit)//�O���̊O�ł̑���
@@ -139,10 +192,15 @@ public class RocketControl : MonoBehaviour
             {
                 if (Input.GetButtonDown("Horizontal"))//���ړ�
                 {
-                    Vector3 horizonMove = Input.GetAxis("Horizontal") * horizon * spHorizonSpeed;                    
-                    fuel -= spConsumeFuel;//fuel��10����                    
-                    emergencyAvoidance = true;//���ړ�����on                    
-                    spCooldown = true;//sp�N�[���_�E��on                   
+                    Vector3 horizonMove = horizonInput * horizon * spHorizonSpeed;                    
+                    fuel -= spConsumeFuel;//fuel��10����
+                    carrentRotationZ = rotationZ;
+                    spAngleZ = -spMaxAngleZ * horizonInput;
+                    emergencyAvoidance = true;                                       
+                    spCooldown = true;//sp�N�[���_�E��on
+                    spAngleCount = true;
+                    angleChangeTime = 0;
+                    spAngleChangeTime = 0;
                     rb.velocity += horizonMove;//���ړ��̎��s
                     Invoke("cooldown", spCooltime);                   
                     StartCoroutine("antiHorizon", horizonMove);//���ړ���~�̌Ăяo��
@@ -156,7 +214,7 @@ public class RocketControl : MonoBehaviour
                     Invoke("cooldown", spCooltime);
                 }
             }
-            else
+            else if(!emergencyAvoidance)
             {
                 if (Input.GetButton("Horizontal"))//横移動
                 {
@@ -164,16 +222,48 @@ public class RocketControl : MonoBehaviour
                     float rocketAxis = Vector3.Cross(moveDirection, myTransform.position).y < 0 ? -1 : 1;
                     float angle = rocketAngle * rocketAxis;
                     Vector3 horizonSize = horizon * horizonSpeed;
+                    angleChangeTime = Mathf.Clamp(angleChangeTime, -1, 1);
                     if(angle < 90 && Input.GetAxis("Horizontal") < 0)//左
                     {
                         rb.AddForce(-horizonSize);
+                        if(angleChangeTime >= 0)
+                        {
+                            angleChangeTime += rotationSpeedZ;
+                        }
+                        if (angleChangeTime < 0)
+                        {
+                            angleChangeTime += antiRotationSpeedZ;
+                        }
+
                     }
-                    if(angle > -90 && Input.GetAxis("Horizontal") > 0)//右
+                    if (angle > -90 && Input.GetAxis("Horizontal") > 0)//右
                     {
                         rb.AddForce(horizonSize);
+                        if (angleChangeTime <= 0)
+                        {
+                            angleChangeTime -= rotationSpeedZ;
+                        }
+                        if (angleChangeTime > 0)
+                        {
+                            angleChangeTime -= antiRotationSpeedZ;
+                        }
                     }
                 }
-                if (Input.GetAxis("Vertical") < 0 && rb.velocity.magnitude > 100)
+                else//横移動していないとき角度を元に戻す
+                {
+                    if(angleChangeTime < 0)
+                    {
+                        angleChangeTime += antiRotationSpeedZ;
+                        angleChangeTime = System.Math.Min(angleChangeTime, 0);    
+                    }
+                    if(angleChangeTime > 0)
+                    {
+                        angleChangeTime -= antiRotationSpeedZ;
+                        angleChangeTime = System.Math.Max(angleChangeTime, 0);
+                    }
+                }
+
+                if (Input.GetAxis("Vertical") < 0 && rb.velocity.magnitude > 100)//ブレーキ
                 {
                     rb.AddForce(-moveDirection * breakSpeed);
                 }
@@ -182,7 +272,17 @@ public class RocketControl : MonoBehaviour
 
         if (inOrbit)//�O���̒��ł̑���
         {
-            //Debug.Log("inOrbit");
+            Debug.Log("inOrbit");
+            if (angleChangeTime < 0)//角度Zを0に戻す
+            {
+                angleChangeTime += antiRotationSpeedZ;
+                angleChangeTime = System.Math.Min(angleChangeTime, 0);
+            }
+            if (angleChangeTime > 0)
+            {
+                angleChangeTime -= antiRotationSpeedZ;
+                angleChangeTime = System.Math.Max(angleChangeTime, 0);
+            }
 
             chargePower = System.Math.Min(charge, 1);//charge�̍ő�l����
             float escapeSpeed = saveVelocity.magnitude;//�O�����E���̑���
@@ -227,15 +327,6 @@ public class RocketControl : MonoBehaviour
             leftAround = false;
             rightAround = false;
         }
-        //���P�b�g�̊p�x����
-        if (!emergencyAvoidance)//���ړ����͌�����ς��Ȃ�
-        {
-            var rocketAngle = Vector3.Angle(delta, Vector3.forward);
-            var rocketAxis = Vector3.Cross(delta, Vector3.forward).y < 0 ? -1 : 1;
-            var normalizedAngle = Mathf.Repeat(-rocketAngle * rocketAxis, 360);
-            myTransform.rotation = Quaternion.Euler(0, normalizedAngle, 0);
-            //Debug.Log(normalizedAngle);
-        }
     }
 
     private void OnCollisionEnter(Collision collision) //�Ԃ������Ƃ�
@@ -250,12 +341,7 @@ public class RocketControl : MonoBehaviour
         if (collider.gameObject.tag == "Planet" && !colList.Contains(collider.gameObject))
         {
             colList.Add(collider.gameObject);
-            /*planet = collider.GetComponent<Planet>();
-            mass = planet.mass;
-            orbitalRadius = planet.orbitLevel1;
-            */
         }
-        //planetObject = collider.gameObject;
     }
     void OnTriggerExit(Collider collider)
     {
@@ -375,7 +461,7 @@ public class RocketControl : MonoBehaviour
     }
     private IEnumerator antiHorizon(Vector3 horizonMove)//���ړ��̒�~ 
     {
-        yield return new WaitForSeconds(0.15f);
+        yield return new WaitForSeconds(0.35f);
         rb.velocity -= horizonMove;//���ړ��̒�~�̎��s
         yield return new WaitForSeconds(0.05f);
         emergencyAvoidance = false;//���ړ�����off

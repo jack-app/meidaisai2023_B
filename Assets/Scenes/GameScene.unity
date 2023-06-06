@@ -347,11 +347,11 @@ MonoBehaviour:
   maxFuel: 120
   fuelRecovery: 0
   spCooltime: 2
-  spHorizonSpeed: 0
-  spConsumeFuel: 0
-  horizonSpeed: 15
-  breakSpeed: 0
-  spAccelSpeed: 0
+  spHorizonSpeed: 30000
+  spConsumeFuel: 20
+  horizonSpeed: 10
+  breakSpeed: 10
+  spAccelSpeed: 200
   explosionPrefab: {fileID: 100000, guid: f600b4a5a289d0548842df7f27d883ea, type: 3}
   autoCamera: 0
   inOrbit: 0
@@ -1258,7 +1258,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 823353693}
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

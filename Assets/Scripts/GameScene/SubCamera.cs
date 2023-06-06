@@ -69,7 +69,6 @@ public class SubCamera : MonoBehaviour
             }
             else
             {
-                Debug.Log(planetAngle);
                 float esct = System.Math.Min(time / rc.compleatEscapeTime, 1);
                 transform.position = Vector3.Lerp(planetforcasPos, rocketforcasPos, esct);
                 transform.rotation = Quaternion.Lerp(planetAngle, rocketAngle, esct);
