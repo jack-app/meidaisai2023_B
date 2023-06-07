@@ -194,6 +194,7 @@ public class RocketControl : MonoBehaviour
             {
                 if (Input.GetButtonDown("Horizontal"))//���ړ�緊急回避作動
                 {
+                    gameManager.RocketMoveAudio();
                     ParticleSystem particle = horizonInput > 0 ? rightParticle : leftParticle;
                     particle.Play();
                     Vector3 horizonMove = horizonInput * horizon * spHorizonSpeed;
@@ -211,6 +212,7 @@ public class RocketControl : MonoBehaviour
                 }
                 if (Input.GetButtonDown("Vertical") && Input.GetAxis("Vertical") > 0)
                 {
+                    gameManager.RocketMoveAudio();
                     frontParticle.Play();
                     Vector3 accelMove = moveDirection * spAccelSpeed;
                     fuel -= spConsumeFuel;//fuel��10����
@@ -304,6 +306,7 @@ public class RocketControl : MonoBehaviour
                     mainCamera.SetActive(true);
                     subCamera.SetActive(false);
                 }
+                gameManager.RocketMoveAudio();
                 frontParticle.Play();
                 rb.velocity = forward * (escapeSpeed + (maxCharge * chargePower));//���ʕ����ɑ��x��^����           
                 charge = 0f;//charge�̃��Z�b�g

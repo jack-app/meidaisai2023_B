@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Text resultScoreText = null!;
     [SerializeField] private Text speedText = null!;
     [SerializeField] private Slider fuelSlider = null!;
+    [SerializeField] private AudioSource resultMusic = null!;
     private bool pause = false;
     private bool result = false;
 
@@ -42,6 +43,7 @@ public class UIManager : MonoBehaviour
     public void Result(long score)
     {
         Time.timeScale = 0f;
+        resultMusic.Play();
         resultPanel.gameObject.SetActive(true);
         resultScoreText.text = "Your score : " + score.ToString();
         result = true;

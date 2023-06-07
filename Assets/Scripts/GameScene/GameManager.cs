@@ -14,11 +14,16 @@ public class GameManager : MonoBehaviour
     [SerializeField] private SubCamera subCamera = null!;
     [SerializeField] private UIManager uiManager = null!;
     private long score;
+    private AudioSource gameBgm;
+    private AudioSource rocketMoveAudio;
 
     void Start()
     {
         Application.targetFrameRate = 60;
         rocketControl.gameObject.GetComponent<TrailRenderer>().enabled = rocketTrajectoryExist;
+        AudioSource[] audioSources = rocketControl.gameObject.GetComponents<AudioSource>();
+        gameBgm = audioSources[0];
+        rocketMoveAudio = audioSources[1];
     }
 
     private void Update()
@@ -48,6 +53,12 @@ public class GameManager : MonoBehaviour
     private IEnumerator GameFinish()
     {
         yield return new WaitForSecondsRealtime(5f);
+        gameBgm.Stop();
         uiManager.Result(score);
+    }
+
+    public void RocketMoveAudio()
+    {
+        rocketMoveAudio.Play();
     }
 }
