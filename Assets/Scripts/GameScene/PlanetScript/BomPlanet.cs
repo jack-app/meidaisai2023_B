@@ -47,7 +47,6 @@ public class BomPlanet : MonoBehaviour
         {
             if (distance <= planet.orbitLevel1)
             {
-                rocketControl.resultCauseOfDeath = 4;//Ž€ˆöF¯‚Ì”š”­‚ÉŠª‚«ž‚Ü‚ê‚½B
                 rocketControl.RocketDestroy();
             }
             PlanetDestroy();
