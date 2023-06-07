@@ -57,7 +57,7 @@ public class RocketControl : MonoBehaviour
     private float speed; // ���P�b�g�̑���
     private Vector3 relativeRocketPos;
     private float rotateSpeed;
-    private float chargePower;
+    public float chargePower { get; private set; }
     private float angleChangeTime;
     public float rotationZ { get; private set; }
     private float carrentRotationZ;
@@ -65,6 +65,12 @@ public class RocketControl : MonoBehaviour
     private float spAngleChangeRatio;
     private float spAngleZ;
     private float horizonInput;
+
+    private float resultMaxSpeed;//最高速度
+    private float resultTime; //経過時間
+    private int resultPlanetCount;//訪れた星の数
+    private int resultSpCount;//緊急回避した回数
+    public int resultCauseOfDeath;//死因
 
     public bool InGravity()
     {
@@ -96,7 +102,7 @@ public class RocketControl : MonoBehaviour
         nowPosition = myTransform.position;
         delta = (nowPosition - prePosition) / Time.deltaTime;
         prePosition = nowPosition;
-        //Debug.Log(delta.magnitude);
+        resultMaxSpeed = System.Math.Max(resultMaxSpeed, delta.magnitude);
     }
     //�O������E�o����
     void CompleatEscape()
@@ -107,7 +113,7 @@ public class RocketControl : MonoBehaviour
 
     public void RocketDestroy()
     {
-        gameManager.StartGameFinish();
+        gameManager.StartGameFinish(resultCauseOfDeath, resultTime, resultMaxSpeed, resultPlanetCount, resultSpCount);
         crash = true;
         mainCamera.SetActive(true);
         subCamera.SetActive(false);
@@ -123,6 +129,7 @@ public class RocketControl : MonoBehaviour
         GetDeltaPos();
         if (start == false)//�X�^�[�g�_�b�V��
         {
+            angleChangeTime = 0;
             if (Input.GetButtonDown("Jump"))
             {
                 Vector3 StartDirection = new Vector3(0f, 0f, startDash);
@@ -134,10 +141,12 @@ public class RocketControl : MonoBehaviour
         if(start)//�X�^�[�g��fule�̎��ԓ�����̏���
         {
             fuel -= Time.deltaTime;
+            resultTime += Time.deltaTime;
         }
         if(fuel <= 0)
         {
             //Debug.Log("Finish!");
+            resultCauseOfDeath = 1;//死因：燃料がなくなった。
             RocketDestroy();
         }
         fuel = Mathf.Clamp(fuel, 0, maxFuel);//fuel�̍ŏ��l�ő�l����
@@ -184,14 +193,15 @@ public class RocketControl : MonoBehaviour
 
         Vector3 forward = myTransform.forward;//���ʕ����̃x�N�g��
         Vector3 moveDirection = delta.normalized; //�ړ������̒P�ʃx�N�g��
-        if (!inOrbit)//�O���̊O�ł̑���
+        if (!inOrbit && start)//�O���̊O�ł̑���
         {
             Vector3 horizon = Quaternion.Euler(0, 90, 0) * moveDirection;//�������̃x�N�g��
             if (Input.GetButton("Jump") && fuel > spConsumeFuel && !spCooldown)
             {
                 if (Input.GetButtonDown("Horizontal"))//���ړ�
                 {
-                    Vector3 horizonMove = horizonInput * horizon * spHorizonSpeed;                    
+                    Vector3 horizonMove = horizonInput * horizon * spHorizonSpeed;
+                    resultSpCount += 1;
                     fuel -= spConsumeFuel;//fuel��10����
                     carrentRotationZ = rotationZ;
                     spAngleZ = -spMaxAngleZ * horizonInput;
@@ -307,6 +317,7 @@ public class RocketControl : MonoBehaviour
             if(charge > exprosionCharge)//charge���������Ƃ����j
             {
                 //Debug.Log("Explosion!");//��
+                resultCauseOfDeath = 3;//死因：力を貯めすぎた。
                 RocketDestroy();
             }
         }
@@ -331,6 +342,7 @@ public class RocketControl : MonoBehaviour
     private void OnCollisionEnter(Collision collision) //�Ԃ������Ƃ�
     {
         //Debug.Log("CrashExprosion!");//��
+        resultCauseOfDeath = 2;//死因：星に衝突した。
         RocketDestroy();
     }
 
@@ -397,6 +409,7 @@ public class RocketControl : MonoBehaviour
                             rightAround = true;//�����v��蔻��ON
                             orbitCenter = planetObject;
                             fuel += fuelRecovery;
+                            resultPlanetCount += 1;
                             if (autoCamera)
                             {
                                 mainCamera.SetActive(false);
@@ -414,6 +427,7 @@ public class RocketControl : MonoBehaviour
                             leftAround = true;//���v��蔻��ON
                             orbitCenter = planetObject;
                             fuel += fuelRecovery;
+                            resultPlanetCount += 1;
                             if (autoCamera)
                             {
                                 mainCamera.SetActive(false);

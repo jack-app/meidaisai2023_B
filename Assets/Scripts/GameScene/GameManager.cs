@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         score = score > (long)rocketControl.nowPosition.magnitude ? score : (long)rocketControl.nowPosition.magnitude;
-        uiManager.UIUpdate(score, rocketControl.FuelAmount(), rocketControl.delta.magnitude);
+        uiManager.UIUpdate(score, rocketControl.FuelAmount(), rocketControl.delta.magnitude, rocketControl.chargePower);
     }
 
     void FixedUpdate()
@@ -33,15 +33,15 @@ public class GameManager : MonoBehaviour
         subCamera.CameraUpdate();
     }
 
-    public void StartGameFinish()
+    public void StartGameFinish(int CauseOfDeath, float Time, float MaxSpeed, int PlanetCount, int SpCount)
     {
-        StartCoroutine(GameFinish());
+        StartCoroutine(GameFinish(CauseOfDeath, Time, MaxSpeed, PlanetCount, SpCount));
     }
 
 
-    private IEnumerator GameFinish()
+    private IEnumerator GameFinish(int CauseOfDeath, float Time, float MaxSpeed, int PlanetCount, int SpCount)
     {
-        yield return new WaitForSecondsRealtime(5f);
-        uiManager.Result(score);
+        yield return new WaitForSecondsRealtime(3f);
+        uiManager.Result(score, CauseOfDeath, Time, MaxSpeed, PlanetCount, SpCount);
     }
 }
