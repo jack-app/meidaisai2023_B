@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 [RequireComponent (typeof (Detonator))]
 [AddComponentMenu("Detonator/Fireball")]
@@ -50,7 +51,7 @@ public class DetonatorFireball : DetonatorComponent
 		}
 		if (!fireShadowMaterial || wipe)
 		{
-			if (Random.value > 0.5)
+			if (UnityEngine.Random.value > 0.5)
 			{
 				fireShadowMaterial = MyDetonator().smokeAMaterial;
 			}
@@ -163,9 +164,16 @@ public class DetonatorFireball : DetonatorComponent
 	public void UpdateFireShadow()
 	{
 		_fireShadow.transform.localPosition = Vector3.Scale(localPosition,(new Vector3(size, size, size)));
-		
-			//move slightly towards the main camera so it sorts properly
-		_fireShadow.transform.LookAt(Camera.main.transform);
+
+		//move slightly towards the main camera so it sorts properly
+		try
+		{
+			_fireShadow.transform.LookAt(Camera.main.transform);
+		}
+		catch(NullReferenceException)
+        {
+            _fireShadow.transform.LookAt(GameObject.Find("Sub Camera").transform);
+        }
 		_fireShadow.transform.localPosition = -(Vector3.forward * 1f);
 		
 		_fireShadowEmitter.color = new Color(.1f, .1f, .1f, .6f);

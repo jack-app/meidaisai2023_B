@@ -26,7 +26,10 @@ public class RocketControl : MonoBehaviour
     [SerializeField] private float spMaxAngleZ;
     [SerializeField] private float rotationSpeedZ;
     [SerializeField] private float antiRotationSpeedZ;
-    [SerializeField] GameObject explosionPrefab;
+    [SerializeField] private GameObject explosionPrefab;
+    [SerializeField] private ParticleSystem rightParticle;
+    [SerializeField] private ParticleSystem leftParticle;
+    [SerializeField] private ParticleSystem frontParticle;
     public bool autoCamera;
     public bool crash { get; private set; } = false;
     public bool inOrbit = false; // �O���ɏ���Ă邩�̔���
@@ -198,10 +201,12 @@ public class RocketControl : MonoBehaviour
             Vector3 horizon = Quaternion.Euler(0, 90, 0) * moveDirection;//�������̃x�N�g��
             if (Input.GetButton("Jump") && fuel > spConsumeFuel && !spCooldown)
             {
-                if (Input.GetButtonDown("Horizontal"))//���ړ�
+                if (Input.GetButtonDown("Horizontal"))//���ړ�緊急回避作動
                 {
-                    Vector3 horizonMove = horizonInput * horizon * spHorizonSpeed;
                     resultSpCount += 1;
+                    ParticleSystem particle = horizonInput > 0 ? rightParticle : leftParticle;
+                    particle.Play();
+                    Vector3 horizonMove = horizonInput * horizon * spHorizonSpeed;
                     fuel -= spConsumeFuel;//fuel��10����
                     carrentRotationZ = rotationZ;
                     spAngleZ = -spMaxAngleZ * horizonInput;
@@ -216,6 +221,7 @@ public class RocketControl : MonoBehaviour
                 }
                 if (Input.GetButtonDown("Vertical") && Input.GetAxis("Vertical") > 0)
                 {
+                    frontParticle.Play();
                     Vector3 accelMove = moveDirection * spAccelSpeed;
                     fuel -= spConsumeFuel;//fuel��10����
                     spCooldown = true;//sp�N�[���_�E��on
@@ -308,6 +314,7 @@ public class RocketControl : MonoBehaviour
                     mainCamera.SetActive(true);
                     subCamera.SetActive(false);
                 }
+                frontParticle.Play();
                 rb.velocity = forward * (escapeSpeed + (maxCharge * chargePower));//���ʕ����ɑ��x��^����           
                 charge = 0f;//charge�̃��Z�b�g
                 escape = true;//escape������on

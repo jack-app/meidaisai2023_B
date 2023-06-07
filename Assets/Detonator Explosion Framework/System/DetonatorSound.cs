@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.Windows.WebCam;
+using System;
 
 [RequireComponent (typeof (Detonator))]
 [AddComponentMenu("Detonator/Sound")]
@@ -45,22 +47,31 @@ public class DetonatorSound : DetonatorComponent {
 	
 		if (!_delayedExplosionStarted)
 		{
-			_explodeDelay = explodeDelayMin + (Random.value * (explodeDelayMax - explodeDelayMin));
+			_explodeDelay = explodeDelayMin + (UnityEngine.Random.value * (explodeDelayMax - explodeDelayMin));
 		}		
 		if (_explodeDelay <= 0) 
 		{
-	//		_soundComponent.minVolume = minVolume;
-	//		_soundComponent.maxVolume = maxVolume;
-	//		_soundComponent.rolloffFactor = rolloffFactor;
-			
-			if (Vector3.Distance(Camera.main.transform.position, this.transform.position) < distanceThreshold)
+			//		_soundComponent.minVolume = minVolume;
+			//		_soundComponent.maxVolume = maxVolume;
+			//		_soundComponent.rolloffFactor = rolloffFactor;
+
+			Vector3 cameraPos;
+			try
 			{
-				_idx = (int)(Random.value * nearSounds.Length);
+				cameraPos = GameObject.Find("Main Camera").transform.position;
+			}
+			catch (NullReferenceException)
+			{
+				cameraPos = GameObject.Find("Sub Camera").transform.position;
+			}
+            if (Vector3.Distance(cameraPos, this.transform.position) < distanceThreshold)
+			{
+				_idx = (int)(UnityEngine.Random.value * nearSounds.Length);
 				_soundComponent.PlayOneShot(nearSounds[_idx]);
 			}
 			else
 			{
-				_idx = (int)(Random.value * farSounds.Length);
+				_idx = (int)(UnityEngine.Random.value * farSounds.Length);
 				_soundComponent.PlayOneShot(farSounds[_idx]);
 			}	
 			_delayedExplosionStarted = false;

@@ -8,22 +8,31 @@ public class Planet : MonoBehaviour
     private System.Random random = new System.Random();
     public long orbitRadius { get; private set; } // destroyで使う
 
+    private void VisualSetActive()
+    {
+        this.gameObject.transform.GetChild(0).gameObject.SetActive(GameManager.visualGravityExist);
+        this.gameObject.transform.GetChild(1).gameObject.SetActive(GameManager.visualOrbitExist);
+        this.gameObject.GetComponent<TrailRenderer>().enabled = GameManager.planetTrajectoryExist;
+    }
+
     // インスタンス化したときに呼び出される
     public int Initialize(int orbitRadius)
     {
-        int planetRadius = random.Next(30, 90);
+        int planetRadius = orbitRadius > 5000 && random.Next(100) <= 2 ? random.Next(300, 400) : random.Next(50, 100);
         this.orbitRadius = orbitRadius + planetRadius / 2;
         int randomDeg = random.Next(360);
         this.transform.localScale = new Vector3(planetRadius, planetRadius, planetRadius);
         this.transform.position = new Vector3(orbitRadius * (float)Math.Cos(randomDeg * Math.PI / 180), 0, this.orbitRadius * (float)Math.Sin(randomDeg * Math.PI / 180));
+        VisualSetActive();
         return planetRadius;
     }
-    public int Initialize(int orbitRadius, int randomDeg)
+    public int Initialize(int orbitRadius, int randomDeg, bool large)
     {
-        int planetRadius = random.Next(30, 90);
+        int planetRadius = orbitRadius > 5000 && large ? random.Next(300, 400) : random.Next(50, 100);
         this.orbitRadius = orbitRadius + planetRadius / 2;
         this.transform.localScale = new Vector3(planetRadius, planetRadius, planetRadius);
         this.transform.position = new Vector3(orbitRadius * (float)Math.Cos(randomDeg * Math.PI / 180), 0, this.orbitRadius * (float)Math.Sin(randomDeg * Math.PI / 180));
+        VisualSetActive();
         return planetRadius;
     }
 
