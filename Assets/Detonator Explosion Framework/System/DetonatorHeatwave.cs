@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 [RequireComponent (typeof (Detonator))]
 [AddComponentMenu("Detonator/Heatwave")]
@@ -13,6 +14,7 @@ public class DetonatorHeatwave : DetonatorComponent {
 	private float _baseDuration = .25f;
 	private bool _delayedExplosionStarted = false;
 	private float _explodeDelay;
+	private GameObject subCamera = null!;
 	
 	public float zOffset = .5f;
 	public float distortion = 64;
@@ -30,6 +32,7 @@ public class DetonatorHeatwave : DetonatorComponent {
 	
 	void Update () 
 	{
+		if (subCamera == null) subCamera = GameObject.Find("Sub Camera");
 		if (_delayedExplosionStarted)
 		{
 			_explodeDelay = (_explodeDelay - Time.deltaTime);
@@ -42,8 +45,15 @@ public class DetonatorHeatwave : DetonatorComponent {
         //_heatwave doesn't get defined unless SystemInfo.supportsImageEffects is true, checked in Explode()
 		if (_heatwave)
 		{
-			// billboard it so it always faces the camera - can't use regular lookat because the built in Unity plane is lame
-			_heatwave.transform.rotation = Quaternion.FromToRotation(Vector3.up, Camera.main.transform.position - _heatwave.transform.position); 
+            // billboard it so it always faces the camera - can't use regular lookat because the built in Unity plane is lame
+            try
+            {
+            _heatwave.transform.rotation = Quaternion.FromToRotation(Vector3.up, Camera.main.transform.position - _heatwave.transform.position); 
+            }
+            catch (NullReferenceException)
+            {
+                _heatwave.transform.rotation = Quaternion.FromToRotation(Vector3.up, subCamera.transform.position - _heatwave.transform.position);
+            }
 			_heatwave.transform.localPosition = localPosition + (Vector3.forward * zOffset);
 			
 			_elapsedTime = _elapsedTime + Time.deltaTime;
@@ -68,7 +78,7 @@ public class DetonatorHeatwave : DetonatorComponent {
 
             if (!_delayedExplosionStarted)
             {
-                _explodeDelay = explodeDelayMin + (Random.value * (explodeDelayMax - explodeDelayMin));
+                _explodeDelay = explodeDelayMin + (UnityEngine.Random.value * (explodeDelayMax - explodeDelayMin));
             }
             if (_explodeDelay <= 0)
             {

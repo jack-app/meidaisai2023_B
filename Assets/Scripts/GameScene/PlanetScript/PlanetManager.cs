@@ -18,7 +18,7 @@ public class PlanetManager : MonoBehaviour
         bool large = random.Next(100) < 4;
         for (int count = 0; count < spawnCount; count++)
         {
-            Planet prefab = random.Next(100) <= 50 ? bomPlanetPrefab : planetPrefab;
+            Planet prefab = random.Next(100) <= 30 ? bomPlanetPrefab : planetPrefab;
             Planet planet = Instantiate(prefab, planetParent.transform);
             planetList.Add(planet);
             int planetSize = planet.Initialize(minSpawnableRange, firstDeg + deg * count, large);
@@ -28,7 +28,7 @@ public class PlanetManager : MonoBehaviour
     }
     private void Spawn()
     {
-        Planet prefab = random.Next(100) <= 50 ? bomPlanetPrefab : planetPrefab;
+        Planet prefab = random.Next(100) <= 30 ? bomPlanetPrefab : planetPrefab;
         Planet planet = Instantiate(prefab, planetParent.transform);
         planetList.Add(planet);
         int planetSize = planet.Initialize(minSpawnableRange);
