@@ -137,13 +137,17 @@ public class UIManager : MonoBehaviour
         {
             resultComment.text = "ここからが本番";
         }
-        else if (score > 70000 && score <= 90000)
+        else if (score > 70000 && score <= 80000)
         {
             resultComment.text = "もしかして：玄人";
         }
+        else if (score > 80000 && score <= 90000)
+        {
+            resultComment.text = "Great!";
+        }
         else if (score > 90000 && score <= 100000)
         {
-            resultComment.text = "惜しいね";
+            resultComment.text = "惜しい!";
         }
         else if (score > 100000 && score <= 200000)
         {
@@ -151,7 +155,7 @@ public class UIManager : MonoBehaviour
         }
         else if (score > 100000 && score <= 200000 && SpCount == 0)
         {
-            resultComment.text = "Perfect Game!";
+            resultComment.text = "Perfect Astrunner!";
         }
         else if (score >= 200000)
         {

@@ -392,15 +392,15 @@ MonoBehaviour:
   maxCharge: 100
   charge: 0
   chargeSpeed: 0.01
-  exprosionCharge: 1.5
+  exprosionCharge: 1.8
   fuel: 90
   maxFuel: 90
   fuelRecovery: 15
   spCooltime: 2
-  spHorizonSpeed: 500
-  spConsumeFuel: 20
+  spHorizonSpeed: 700
+  spConsumeFuel: 15
   horizonSpeed: 10
-  breakSpeed: 10
+  breakSpeed: 20
   spAccelSpeed: 200
   maxAngleZ: 10
   spMaxAngleZ: 15
