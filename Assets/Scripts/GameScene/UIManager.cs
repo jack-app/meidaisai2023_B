@@ -95,13 +95,21 @@ public class UIManager : MonoBehaviour
         {
             causeOfDeathText = "ブラックホールに飲まれた";
         }
+        else if (CauseOfDeath == 6)
+        {
+            causeOfDeathText = "自爆した";
+        }
         else
         {
             causeOfDeathText = "なにが起きた？";
         }
         resultCauseOfDeath.text = causeOfDeathText;
 
-        if(score <= 1000)
+        if(CauseOfDeath == 6)
+        {
+            resultComment.text = "諦めんなよ";
+        }
+        else if(score <= 1000)
         {
             resultComment.text = "ついてないね";
         }

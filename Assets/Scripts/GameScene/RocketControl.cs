@@ -129,6 +129,11 @@ public class RocketControl : MonoBehaviour
 
     public void RocketUpdate()
     {
+        if(Input.GetKey(KeyCode.Return))
+        {
+            resultCauseOfDeath = 6;
+            RocketDestroy();
+        }
         autoCamera = Setting.autoCamera;
         GetComponent<TrailRenderer>().enabled = Setting.rocketTrajectoryExist;
         GetDeltaPos();
