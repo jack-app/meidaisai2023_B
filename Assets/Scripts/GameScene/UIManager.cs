@@ -64,7 +64,6 @@ public class UIManager : MonoBehaviour
         int minutes = (int)TotalTime / 60;
         float seconds = TotalTime - minutes * 60;
         Time.timeScale = 0f;
-        resultMusic.Play();
         Destroy(fuelSlider.gameObject);
         Destroy(ChargeSliderL.gameObject);
         Destroy(ChargeSliderR.gameObject);

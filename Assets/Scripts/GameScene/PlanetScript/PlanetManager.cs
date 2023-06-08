@@ -20,14 +20,17 @@ public class PlanetManager : MonoBehaviour
         for (int count = 0; count < spawnCount; count++)
         {
             Planet prefab;
-            if(minSpawnableRange >= 5000 && random.Next(10000) < 2)
+            bool blackHole = false;
+            if(minSpawnableRange >= 5000 && random.Next(1000) < 2)
             {
                 prefab = blackholePrefab;
+                Debug.Log("black hole was spawned");
+                blackHole = true;
             }
             else prefab = random.Next(100) <= 30 ? bomPlanetPrefab : planetPrefab;
             Planet planet = Instantiate(prefab, planetParent.transform);
             planetList.Add(planet);
-            int planetSize = planet.Initialize(minSpawnableRange, firstDeg + deg * count, large);
+            int planetSize = planet.Initialize(minSpawnableRange, firstDeg + deg * count, large, blackHole);
             maxPlanet = maxPlanet < planetSize ? planetSize : maxPlanet;
         }
         minSpawnableRange += maxPlanet;
@@ -35,29 +38,38 @@ public class PlanetManager : MonoBehaviour
     private void Spawn()
     {
         Planet prefab;
-        if (minSpawnableRange >= 5000 && random.Next(10000) < 2)
+        bool blackhole = false;
+        if (minSpawnableRange >= 5000 && random.Next(1000) < 2)
         {
+            Debug.Log("black hole was spawned");
             prefab = blackholePrefab;
+            blackhole = true;
         }
         else prefab = random.Next(100) <= 30 ? bomPlanetPrefab : planetPrefab;
         Planet planet = Instantiate(prefab, planetParent.transform);
         planetList.Add(planet);
-        int planetSize = planet.Initialize(minSpawnableRange);
+        int planetSize = planet.Initialize(minSpawnableRange, blackhole);
         minSpawnableRange += planetSize;
     }
 
 
     public void PlanetSpawn(float rocketDistance)
     {
-        while (minSpawnableRange <= rocketDistance + 10000)
+        while (minSpawnableRange <= rocketDistance + 30000)
         {
             if (random.Next(100) <= 3 * (1 + Mathf.Pow(rocketDistance, 4) ) && random.Next(100) < Mathf.Pow(minSpawnableRange, 1f/2f)) //¶¬‚·‚é‚©”»’è
             {
                 int spawnCount = 1;
+                int randomInt = random.Next(1000);
                 if (random.Next(100) <= Mathf.Pow(minSpawnableRange, 1f / 3f)) spawnCount++;
                 else Spawn();
-                if (random.Next(1000) <= Mathf.Pow(minSpawnableRange, 1f / 3f)) spawnCount++;
-                if (random.Next(10000) <= Mathf.Pow(minSpawnableRange, 1f / 3f)) spawnCount++;
+                if (randomInt <= Mathf.Pow(minSpawnableRange, 1f / 2f)) spawnCount++;
+                if (randomInt <= Mathf.Pow(minSpawnableRange, 1f / 3f)) spawnCount++;
+                if (randomInt <= Mathf.Pow(minSpawnableRange, 1f / 4f)) spawnCount++;
+                if (randomInt <= Mathf.Pow(minSpawnableRange, 1f / 4.5f)) spawnCount++;
+                if (randomInt <= Mathf.Pow(minSpawnableRange, 1f / 5f)) spawnCount++;
+                if (randomInt <= Mathf.Pow(minSpawnableRange, 1f / 5.5f)) spawnCount++;
+                if (randomInt <= Mathf.Pow(minSpawnableRange, 1f / 6f)) spawnCount++;
                 Spawn(spawnCount);
             }
             else minSpawnableRange++;
