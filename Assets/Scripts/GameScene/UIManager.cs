@@ -18,6 +18,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI resultComment;
     [SerializeField] private TextMeshProUGUI speedText = null!;
     [SerializeField] private Slider fuelSlider = null!;
+    [SerializeField] private AudioSource resultMusic = null!;
     [SerializeField] private Slider ChargeSliderL = null!;
     [SerializeField] private Slider ChargeSliderR = null!;
     [SerializeField] private Image ChargeSliderLImg;
@@ -63,79 +64,79 @@ public class UIManager : MonoBehaviour
         int minutes = (int)TotalTime / 60;
         float seconds = TotalTime - minutes * 60;
         Time.timeScale = 0f;
+        resultMusic.Play();
         Destroy(fuelSlider.gameObject);
         Destroy(ChargeSliderL.gameObject);
         Destroy(ChargeSliderR.gameObject);
         Destroy(scoreText);
         Destroy(speedText);
-
         resultPanel.gameObject.SetActive(true);
         resultScoreText.text = score.ToString("N0") + "km";
-        resultTotalTime.text = "Œo‰ßŠÔ:" + minutes.ToString("D2") + ":" + ((int)seconds).ToString("D2");
-        resultMaxSpeed.text = "Å‚‘¬“x:" + MaxSpeed.ToString("F") + "km/s";
-        resultPlanetCount.text = "–K‚ê‚½¯‚Ì”:" + PlanetCount.ToString() + "ŒÂ";
-        resultSpCount.text = "‹Ù‹}‰ñ”ğ‚Ì‰ñ”:" + SpCount.ToString() + "‰ñ";
+        resultTotalTime.text = "çµŒéæ™‚é–“:" + minutes.ToString("D2") + ":" + ((int)seconds).ToString("D2");
+        resultMaxSpeed.text = "æœ€é«˜é€Ÿåº¦:" + MaxSpeed.ToString("F") + "km/s";
+        resultPlanetCount.text = "è¨ªã‚ŒãŸæ˜Ÿã®æ•°:" + PlanetCount.ToString() + "å€‹";
+        resultSpCount.text = "ç·Šæ€¥å›é¿ã®å›æ•°:" + SpCount.ToString() + "å›";
         if(CauseOfDeath == 1)
         {
-            causeOfDeathText = "ƒGƒlƒ‹ƒM[‚ªØ‚ê‚Ä”š”­‚µ‚½";
+            causeOfDeathText = "ã‚¨ãƒãƒ«ã‚®ãƒ¼ãŒåˆ‡ã‚Œã¦çˆ†ç™ºã—ãŸ";
         }
         else if (CauseOfDeath == 2)
         {
-            causeOfDeathText = "¯‚ÉÕ“Ë‚µ‚Ä”š”­‚µ‚½";
+            causeOfDeathText = "æ˜Ÿã«è¡çªã—ã¦çˆ†ç™ºã—ãŸ";
         }
         else if (CauseOfDeath == 3)
         {
-            causeOfDeathText = "—Í‚ğ’™‚ß‚·‚¬‚Ä”š”­‚µ‚½";
+            causeOfDeathText = "åŠ›ã‚’è²¯ã‚ã™ãã¦çˆ†ç™ºã—ãŸ";
         }
         else if (CauseOfDeath == 4)
         {
-            causeOfDeathText = "¯‚Ì”š”­‚ÉŠª‚«‚Ü‚ê‚½";
+            causeOfDeathText = "æ˜Ÿã®çˆ†ç™ºã«å·»ãè¾¼ã¾ã‚ŒãŸ";
         }
         else if (CauseOfDeath == 5)
         {
-            causeOfDeathText = "ƒuƒ‰ƒbƒNƒz[ƒ‹‚Éˆù‚Ü‚ê‚½";
+            causeOfDeathText = "ãƒ–ãƒ©ãƒƒã‚¯ãƒ›ãƒ¼ãƒ«ã«é£²ã¾ã‚ŒãŸ";
         }
         else
         {
-            causeOfDeathText = "‚È‚É‚ª‹N‚«‚½H";
+            causeOfDeathText = "ãªã«ãŒèµ·ããŸï¼Ÿ";
         }
         resultCauseOfDeath.text = causeOfDeathText;
 
         if(score <= 1000)
         {
-            resultComment.text = "‚Â‚¢‚Ä‚È‚¢‚Ë";
+            resultComment.text = "ã¤ã„ã¦ãªã„ã­";
         }
         else if(score > 1000 && score <= 2000)
         {
-            resultComment.text = "‰SÒŠ½Œ}‚Å‚·";
+            resultComment.text = "åˆå¿ƒè€…æ­“è¿ã§ã™";
         }
         else if (score > 2000 && score <= 5000)
         {
-            resultComment.text = "‚Ü‚¾‚Ü‚¾‚¾‚Ë";
+            resultComment.text = "ã¾ã ã¾ã ã ã­";
         }
         else if (score > 5000 && score <= 15000)
         {
-            resultComment.text = "‚±‚±‚Ü‚Å‚Í—ûK";
+            resultComment.text = "ã“ã“ã¾ã§ã¯ç·´ç¿’";
         }
         else if (score > 15000 && score <= 30000)
         {
-            resultComment.text = "‚â‚é‚¶‚á‚ñ";
+            resultComment.text = "ã‚„ã‚‹ã˜ã‚ƒã‚“";
         }
         else if (score > 30000 && score <= 50000)
         {
-            resultComment.text = "ƒiƒCƒXƒtƒ‰ƒCƒg!";
+            resultComment.text = "ãƒŠã‚¤ã‚¹ãƒ•ãƒ©ã‚¤ãƒˆ!";
         }
         else if (score > 50000 && score <= 70000)
         {
-            resultComment.text = "‚±‚±‚©‚ç‚ª–{”Ô";
+            resultComment.text = "ã“ã“ã‹ã‚‰ãŒæœ¬ç•ª";
         }
         else if (score > 70000 && score <= 90000)
         {
-            resultComment.text = "‚à‚µ‚©‚µ‚ÄFŒºl";
+            resultComment.text = "ã‚‚ã—ã‹ã—ã¦ï¼šç„äºº";
         }
         else if (score > 90000 && score <= 100000)
         {
-            resultComment.text = "É‚µ‚¢‚Ë";
+            resultComment.text = "æƒœã—ã„ã­";
         }
         else if (score > 100000 && score <= 200000)
         {
@@ -147,7 +148,7 @@ public class UIManager : MonoBehaviour
         }
         else if (score >= 200000)
         {
-            resultComment.text = "‚»‚ñ‚È‚ÉŠy‚µ‚¢?";
+            resultComment.text = "ãã‚“ãªã«æ¥½ã—ã„?";
         }
 
 
@@ -181,7 +182,7 @@ public class UIManager : MonoBehaviour
             fuleColor.color = fuelEnough;
         }
 
-        if (Input.GetKey(KeyCode.P))
+        if (KeyManager.p.down)
         {
             Pause();
         }
@@ -199,7 +200,7 @@ public class UIManager : MonoBehaviour
         {
             Resume();
         }
-        if (result && Input.GetKey(KeyCode.C))
+        if (result && KeyManager.c.down)
         {
             Continue();
         }
