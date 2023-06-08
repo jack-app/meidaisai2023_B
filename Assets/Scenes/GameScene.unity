@@ -16911,6 +16911,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   planetPrefab: {fileID: 2617456007389463383, guid: 7e12d234775695d4792cee72407321d7, type: 3}
   bomPlanetPrefab: {fileID: 2617456007389463383, guid: 6120961f2fdf04747906001138a643a2, type: 3}
+  blackholePrefab: {fileID: 2617456007389463383, guid: 5384b5396b137a64dbcffa999786f523, type: 3}
   planetParent: {fileID: 1231715250}
 --- !u!1 &1241139531
 GameObject:

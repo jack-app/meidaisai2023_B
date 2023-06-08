@@ -5,6 +5,7 @@ public class PlanetManager : MonoBehaviour
 {
     [SerializeField] private Planet planetPrefab = null!;
     [SerializeField] private Planet bomPlanetPrefab = null!;
+    [SerializeField] private Planet blackholePrefab = null!;
     [SerializeField] private GameObject planetParent = null!;
     private List<Planet> planetList = new List<Planet>();
     private int minSpawnableRange = 700;
@@ -18,7 +19,12 @@ public class PlanetManager : MonoBehaviour
         bool large = random.Next(100) < 4;
         for (int count = 0; count < spawnCount; count++)
         {
-            Planet prefab = random.Next(100) <= 30 ? bomPlanetPrefab : planetPrefab;
+            Planet prefab;
+            if(minSpawnableRange >= 5000 && random.Next(10000) < 2)
+            {
+                prefab = blackholePrefab;
+            }
+            else prefab = random.Next(100) <= 30 ? bomPlanetPrefab : planetPrefab;
             Planet planet = Instantiate(prefab, planetParent.transform);
             planetList.Add(planet);
             int planetSize = planet.Initialize(minSpawnableRange, firstDeg + deg * count, large);
@@ -28,7 +34,12 @@ public class PlanetManager : MonoBehaviour
     }
     private void Spawn()
     {
-        Planet prefab = random.Next(100) <= 30 ? bomPlanetPrefab : planetPrefab;
+        Planet prefab;
+        if (minSpawnableRange >= 5000 && random.Next(10000) < 2)
+        {
+            prefab = blackholePrefab;
+        }
+        else prefab = random.Next(100) <= 30 ? bomPlanetPrefab : planetPrefab;
         Planet planet = Instantiate(prefab, planetParent.transform);
         planetList.Add(planet);
         int planetSize = planet.Initialize(minSpawnableRange);
@@ -71,7 +82,7 @@ public class PlanetManager : MonoBehaviour
         List<int> destroyIndex = new List<int>();
         foreach (Planet planet in planetList)
         {
-            if (planet.orbitRadius + planet.planetRadius * 8 >= rocketDistance) break;
+            if (planet.orbitRadius + planet.gravityRadius >= rocketDistance) break;
             destroyIndex.Insert(0, planetList.IndexOf(planet));
         }
         foreach (int num in destroyIndex)

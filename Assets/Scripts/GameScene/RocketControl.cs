@@ -133,7 +133,7 @@ public class RocketControl : MonoBehaviour
         if (start == false)//�X�^�[�g�_�b�V��
         {
             angleChangeTime = 0;
-            if (Input.GetButtonDown("Jump"))
+            if (KeyManager.space.down)
             {
                 Vector3 StartDirection = new Vector3(0f, 0f, startDash);
                 rb.AddForce(StartDirection);
@@ -185,11 +185,11 @@ public class RocketControl : MonoBehaviour
             myTransform.rotation = Quaternion.Euler(0, normalizedAngle, rotationZ);
             //Debug.Log(normalizedAngle);
         }
-        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+        if (KeyManager.horizontal.axis > 0)
         {
             horizonInput = 1;
         }
-        else if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+        else if(KeyManager.horizontal.axis < 0)
         {
             horizonInput = -1;
         }
@@ -199,9 +199,9 @@ public class RocketControl : MonoBehaviour
         if (!inOrbit && start)//�O���̊O�ł̑���
         {
             Vector3 horizon = Quaternion.Euler(0, 90, 0) * moveDirection;//�������̃x�N�g��
-            if (Input.GetButton("Jump") && fuel > spConsumeFuel && !spCooldown)
+            if (KeyManager.space.keep && fuel > spConsumeFuel && !spCooldown)
             {
-                if (Input.GetButtonDown("Horizontal"))//���ړ�緊急回避作動
+                if (KeyManager.horizontal.down)//���ړ�緊急回避作動
                 {
                     gameManager.RocketMoveAudio();
                     resultSpCount += 1;
@@ -220,7 +220,7 @@ public class RocketControl : MonoBehaviour
                     Invoke("cooldown", spCooltime);                   
                     StartCoroutine("antiHorizon", horizonMove);//���ړ���~�̌Ăяo��
                 }
-                if (Input.GetButtonDown("Vertical") && Input.GetAxis("Vertical") > 0)
+                if (KeyManager.vertical.down && KeyManager.vertical.axis > 0)
                 {
                     gameManager.RocketMoveAudio();
                     frontParticle.Play();
@@ -233,14 +233,14 @@ public class RocketControl : MonoBehaviour
             }
             else if(!emergencyAvoidance)
             {
-                if (Input.GetButton("Horizontal"))//横移動
+                if (KeyManager.horizontal.keep)//横移動
                 {
                     float rocketAngle = Vector3.Angle(moveDirection, myTransform.position);
                     float rocketAxis = Vector3.Cross(moveDirection, myTransform.position).y < 0 ? -1 : 1;
                     float angle = rocketAngle * rocketAxis;
                     Vector3 horizonSize = horizon * horizonSpeed;
                     angleChangeTime = Mathf.Clamp(angleChangeTime, -1, 1);
-                    if(angle < 90 && Input.GetAxis("Horizontal") < 0)//左
+                    if(angle < 90 && KeyManager.horizontal.axis < 0)//左
                     {
                         rb.AddForce(-horizonSize);
                         if(angleChangeTime >= 0)
@@ -253,7 +253,7 @@ public class RocketControl : MonoBehaviour
                         }
 
                     }
-                    if (angle > -90 && Input.GetAxis("Horizontal") > 0)//右
+                    if (angle > -90 && KeyManager.horizontal.axis > 0)//右
                     {
                         rb.AddForce(horizonSize);
                         if (angleChangeTime <= 0)
@@ -280,7 +280,7 @@ public class RocketControl : MonoBehaviour
                     }
                 }
 
-                if (Input.GetAxis("Vertical") < 0 && rb.velocity.magnitude > 100)//ブレーキ
+                if (KeyManager.vertical.axis < 0 && rb.velocity.magnitude > 100)//ブレーキ
                 {
                     rb.AddForce(-moveDirection * breakSpeed);
                 }
@@ -303,12 +303,12 @@ public class RocketControl : MonoBehaviour
 
             chargePower = System.Math.Min(charge, 1);//charge�̍ő�l����
             float escapeSpeed = saveVelocity.magnitude;//�O�����E���̑���
-            if (Input.GetButton("Jump"))
+            if (KeyManager.space.keep)
             {
                 Debug.Log("charge");
                 charge += chargeSpeed;//�X�y�[�X�������charge�𑝉�
             }
-            if (Input.GetButtonUp("Jump"))//�X�y�[�X�L�[�𗣂����Ƃ�
+            if (KeyManager.space.up)//�X�y�[�X�L�[�𗣂����Ƃ�
             {
                 Debug.Log("Escape");
                 if (autoCamera)
