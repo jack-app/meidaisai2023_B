@@ -51,7 +51,7 @@ public class PlanetManager : MonoBehaviour
     {
         while (minSpawnableRange <= rocketDistance + 10000)
         {
-            if (random.Next(100) <= 3 * (1 + Mathf.Pow(rocketDistance, 4) ) && random.Next(100) < Mathf.Pow(minSpawnableRange, 1f/2f)) //¶¬‚·‚é‚©”»’è
+            if (random.Next(100) <= 3 * (1 + Mathf.Pow(rocketDistance, 4) ) && random.Next(100) < Mathf.Pow(minSpawnableRange, 1f/2f)) //ÂÂ¶ÂÂ¬â€šÂ·â€šÃ©â€šÂ©â€Â»â€™Ã¨
             {
                 int spawnCount = 1;
                 if (random.Next(100) <= Mathf.Pow(minSpawnableRange, 1f / 3f)) spawnCount++;
@@ -69,6 +69,7 @@ public class PlanetManager : MonoBehaviour
         foreach (Planet planet in planetList)
         {
             planet.Move();
+            planet.VisualSetActive();
         }
     }
 

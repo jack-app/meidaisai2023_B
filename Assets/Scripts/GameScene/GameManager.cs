@@ -5,11 +5,6 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static bool rocketTrajectoryExist = true;
-    public static bool planetTrajectoryExist = true;
-    public static bool visualGravityExist = true;
-    public static bool visualOrbitExist = true;
-
     [SerializeField] private RocketControl rocketControl = null!;
     [SerializeField] private PlanetManager planetManager = null!;
     [SerializeField] private SubCamera subCamera = null!;
@@ -27,7 +22,6 @@ public class GameManager : MonoBehaviour
         gameBgm = audioSources[0];
         rocketMoveAudio = audioSources[1];
     }
-
     private void Update()
     {
         KeyManager.GetKeyInfo();

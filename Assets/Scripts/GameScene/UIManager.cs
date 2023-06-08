@@ -7,6 +7,7 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] private GameObject pausePanel = null!;
     [SerializeField] private GameObject resultPanel = null!;
+    [SerializeField] private GameObject settingPanel = null!;
     [SerializeField] private TextMeshProUGUI scoreText = null!;
     [SerializeField] private TextMeshProUGUI resultScoreText = null!;
     [SerializeField] private TextMeshProUGUI resultCauseOfDeath;
@@ -30,6 +31,7 @@ public class UIManager : MonoBehaviour
     private string causeOfDeathText;
     private bool pause = false;
     private bool result = false;
+    private bool setting = false;
 
     private void Pause()
     {
@@ -184,7 +186,17 @@ public class UIManager : MonoBehaviour
         {
             Pause();
         }
-        if (pause && KeyManager.r.down)
+        if (pause && Input.GetKey(KeyCode.S))
+        {
+            setting = true;
+            settingPanel.gameObject.SetActive(true);
+        }
+        if (setting && Input.GetKey(KeyCode.B))
+        {
+            setting = false;
+            settingPanel.gameObject.SetActive(false);
+        }
+        if (pause && !setting && Input.GetKey(KeyCode.R))
         {
             Resume();
         }
@@ -192,7 +204,7 @@ public class UIManager : MonoBehaviour
         {
             Continue();
         }
-        if ((result || pause)&& KeyManager.f.down)
+        if ((result || pause) && !setting && Input.GetKey(KeyCode.F))
         {
             Finish();
         }
