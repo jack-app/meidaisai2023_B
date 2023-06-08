@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         KeyManager.GetKeyInfo();
+        if (rocketControl.crash) return;
         score = score > (long)rocketControl.nowPosition.magnitude ? score : (long)rocketControl.nowPosition.magnitude;
         uiManager.UIUpdate(score, rocketControl.FuelAmount(), rocketControl.delta.magnitude, rocketControl.chargePower);
     }
@@ -73,6 +74,7 @@ public static class KeyManager
     public static Key b;
     public static Key lShift;
     public static Key rShift;
+    private static bool preSpaceKeep = false;
 
     public static void GetKeyInfo()
     {
@@ -88,6 +90,13 @@ public static class KeyManager
         b = new Key() { down = Input.GetKeyDown(KeyCode.B), up = Input.GetKeyUp(KeyCode.B), keep = Input.GetKey(KeyCode.B) };
         lShift = new Key() { down = Input.GetKeyDown((KeyCode.LeftShift)), up = Input.GetKeyUp((KeyCode.LeftShift)), keep = Input.GetKey((KeyCode.LeftShift)) };
         rShift = new Key() { down = Input.GetKeyDown((KeyCode.RightShift)), up = Input.GetKeyUp((KeyCode.RightShift)), keep = Input.GetKey((KeyCode.RightShift)) };
+        if (space.keep) preSpaceKeep = true;
+        else if (preSpaceKeep) 
+        {
+            if (!space.up) Debug.LogWarning("Up is not working");
+            space.up = true;
+            preSpaceKeep = false; 
+        }
     }
 }
 

@@ -17,9 +17,10 @@ public class Planet : MonoBehaviour
     }
 
     // インスタンス化したときに呼び出される
-    public int Initialize(int orbitRadius)
+    public int Initialize(int orbitRadius, bool blackHole)
     {
-        planetRadius = orbitRadius > 5000 && random.Next(100) <= 2 ? random.Next(300, 400) : random.Next(50, 100);
+        if (blackHole) planetRadius = 200;
+        else planetRadius = orbitRadius > 5000 && random.Next(100) <= 2 ? random.Next(300, 400) : random.Next(50, 100);
         gravityRadius = planetRadius * (int)this.gameObject.GetComponent<SphereCollider>().radius;
         this.orbitRadius = orbitRadius + planetRadius / 2;
         int randomDeg = random.Next(360);
@@ -28,8 +29,10 @@ public class Planet : MonoBehaviour
         VisualSetActive();
         return planetRadius;
     }
-    public int Initialize(int orbitRadius, int randomDeg, bool large)
+    public int Initialize(int orbitRadius, int randomDeg, bool large, bool blackHole)
     {
+        if (blackHole) planetRadius = 200;
+        else planetRadius = orbitRadius > 5000 && large ? random.Next(300, 400) : random.Next(50, 100);
         planetRadius = orbitRadius > 5000 && large ? random.Next(300, 400) : random.Next(50, 100);
         gravityRadius = planetRadius * (int)this.gameObject.GetComponent<SphereCollider>().radius;
         this.orbitRadius = orbitRadius + planetRadius / 2;
