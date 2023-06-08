@@ -8,11 +8,11 @@ public class Planet : MonoBehaviour
     private System.Random random = new System.Random();
     public long orbitRadius { get; private set; } // destroyで使う
 
-    private void VisualSetActive()
+    public void VisualSetActive()
     {
-        this.gameObject.transform.GetChild(0).gameObject.SetActive(GameManager.visualGravityExist);
-        this.gameObject.transform.GetChild(1).gameObject.SetActive(GameManager.visualOrbitExist);
-        this.gameObject.GetComponent<TrailRenderer>().enabled = GameManager.planetTrajectoryExist;
+        this.gameObject.transform.GetChild(0).gameObject.SetActive(Setting.visualGravityExist);
+        this.gameObject.transform.GetChild(1).gameObject.SetActive(Setting.visualOrbitExist);
+        this.gameObject.GetComponent<TrailRenderer>().enabled = Setting.planetTrajectoryExist;
     }
 
     // インスタンス化したときに呼び出される

@@ -4,11 +4,6 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static bool rocketTrajectoryExist = true;
-    public static bool planetTrajectoryExist = true;
-    public static bool visualGravityExist = true;
-    public static bool visualOrbitExist = true;
-
     [SerializeField] private RocketControl rocketControl = null!;
     [SerializeField] private PlanetManager planetManager = null!;
     [SerializeField] private SubCamera subCamera = null!;
@@ -18,9 +13,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Application.targetFrameRate = 60;
-        rocketControl.gameObject.GetComponent<TrailRenderer>().enabled = rocketTrajectoryExist;
     }
-
     private void Update()
     {
         score = score > (long)rocketControl.nowPosition.magnitude ? score : (long)rocketControl.nowPosition.magnitude;

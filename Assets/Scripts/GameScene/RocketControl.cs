@@ -129,6 +129,8 @@ public class RocketControl : MonoBehaviour
 
     public void RocketUpdate()
     {
+        autoCamera = Setting.autoCamera;
+        GetComponent<TrailRenderer>().enabled = Setting.rocketTrajectoryExist;
         GetDeltaPos();
         if (start == false)//�X�^�[�g�_�b�V��
         {
