@@ -70,7 +70,7 @@ public class RocketControl : MonoBehaviour
     private float spAngleZ;
     private float horizonInput;
 
-    private float resultMaxSpeed;//最高速度
+    private float resultMaxSpeed = 0;//最高速度
     private float resultTime; //経過時間
     private int resultPlanetCount;//訪れた星の数
     private int resultSpCount;//緊急回避した回数
@@ -106,7 +106,10 @@ public class RocketControl : MonoBehaviour
         nowPosition = myTransform.position;
         delta = (nowPosition - prePosition) / Time.deltaTime;
         prePosition = nowPosition;
-        resultMaxSpeed = System.Math.Max(resultMaxSpeed, delta.magnitude);
+        if (start)
+        { 
+            resultMaxSpeed = System.Math.Max(resultMaxSpeed, delta.magnitude); 
+        }
     }
     //�O������E�o����
     void CompleatEscape()
@@ -142,7 +145,7 @@ public class RocketControl : MonoBehaviour
         if (start == false)//�X�^�[�g�_�b�V��
         {
             angleChangeTime = 0;
-            if (KeyManager.space.down)
+            if (Input.GetKey(KeyCode.Space))
             {
                 Vector3 StartDirection = new Vector3(0f, 0f, startDash);
                 rb.AddForce(StartDirection);
@@ -194,13 +197,17 @@ public class RocketControl : MonoBehaviour
             myTransform.rotation = Quaternion.Euler(0, normalizedAngle, rotationZ);
             //Debug.Log(normalizedAngle);
         }
-        if (KeyManager.horizontal.axis > 0)
+        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
         {
             horizonInput = 1;
         }
-        else if(KeyManager.horizontal.axis < 0)
+        else if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
         {
             horizonInput = -1;
+        }
+        else
+        {
+            horizonInput = 0;
         }
 
         Vector3 forward = myTransform.forward;//���ʕ����̃x�N�g��
@@ -210,7 +217,7 @@ public class RocketControl : MonoBehaviour
             Vector3 horizon = Quaternion.Euler(0, 90, 0) * moveDirection;//�������̃x�N�g��
             if (KeyManager.space.keep && fuel > spConsumeFuel && !spCooldown)
             {
-                if (KeyManager.horizontal.down)//���ړ�緊急回避作動
+                if (!(horizonInput == 0))//���ړ�緊急回避作動
                 {
                     gameManager.RocketMoveAudio();
                     resultSpCount += 1;
@@ -229,7 +236,7 @@ public class RocketControl : MonoBehaviour
                     Invoke("cooldown", spCooltime);                   
                     StartCoroutine("antiHorizon", horizonMove);//���ړ���~�̌Ăяo��
                 }
-                if (KeyManager.vertical.down && KeyManager.vertical.axis > 0)
+                if (KeyManager.vertical.keep && KeyManager.vertical.axis > 0)
                 {
                     gameManager.RocketMoveAudio();
                     frontParticle.Play();
@@ -289,7 +296,7 @@ public class RocketControl : MonoBehaviour
                     }
                 }
 
-                if (KeyManager.vertical.axis < 0 && rb.velocity.magnitude > 100)//ブレーキ
+                if (KeyManager.vertical.axis < 0 && rb.velocity.magnitude > 100f)//ブレーキ
                 {
                     rb.AddForce(-moveDirection * breakSpeed);
                 }
@@ -317,7 +324,7 @@ public class RocketControl : MonoBehaviour
                 Debug.Log("charge");
                 charge += chargeSpeed;//�X�y�[�X�������charge�𑝉�
             }
-            if (KeyManager.space.up)//�X�y�[�X�L�[�𗣂����Ƃ�
+            else if (chargePower > 0)//�X�y�[�X�L�[�𗣂����Ƃ�
             {
                 Debug.Log("Escape");
                 if (autoCamera)
