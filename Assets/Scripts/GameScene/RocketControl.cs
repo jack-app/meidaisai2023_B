@@ -383,7 +383,7 @@ public class RocketControl : MonoBehaviour
                     Debug.Log(planetObject);
                     planet = planetObject.GetComponent<Planet>();
                     mass = planet.mass;
-                    orbitalRadius = planet.orbitLevel1;
+                    orbitalRadius = planet.planetRadius * 2;
                     //Debug.Log(colList.Count);
                     //�d��
                     //�߂Â����f���̍��W�̎擾
