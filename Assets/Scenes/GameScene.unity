@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.0031535183, g: 0.0027272243, b: 0.0033603678, a: 1}
+  m_IndirectSpecularColor: {r: 0.003104224, g: 0.0027308352, b: 0.0033082762, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1103,6 +1103,7 @@ MonoBehaviour:
   resultComment: {fileID: 1836485257}
   speedText: {fileID: 190154510}
   fuelSlider: {fileID: 823353695}
+  resultMusic: {fileID: 2141539160}
   ChargeSliderL: {fileID: 1026897822}
   ChargeSliderR: {fileID: 1283007046}
   ChargeSliderLImg: {fileID: 868468852}
@@ -1120,146 +1121,6 @@ MonoBehaviour:
   chargeEndColor:
     serializedVersion: 2
     rgba: 3070296551
---- !u!1 &375314428
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 375314429}
-  - component: {fileID: 375314431}
-  - component: {fileID: 375314430}
-  m_Layer: 0
-  m_Name: MoveLeftParticle
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &375314429
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 375314428}
-  m_LocalRotation: {x: -0.7071068, y: -0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 200922816}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
---- !u!199 &375314430
-ParticleSystemRenderer:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 308044263}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.5882353}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &308044266
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 308044263}
-  m_CullTransparentMesh: 1
---- !u!1 &348061090
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 348061092}
-  - component: {fileID: 348061091}
-  - component: {fileID: 348061093}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &348061091
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 348061090}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1613f83f331b07479440c355d053688, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rocketControl: {fileID: 200922819}
-  planetManager: {fileID: 1231715252}
-  subCamera: {fileID: 799155358}
-  uiManager: {fileID: 348061093}
---- !u!4 &348061092
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 348061090}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -39.032135, y: 2980.7563, z: 5436.431}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &348061093
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 348061090}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21be6dea0727e0847a46c550ce4b9cee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pausePanel: {fileID: 308044263}
-  resultPanel: {fileID: 2141539156}
-  scoreText: {fileID: 107763986}
-  resultScoreText: {fileID: 235360300}
-  speedText: {fileID: 708697977}
-  fuelSlider: {fileID: 823353695}
-  resultMusic: {fileID: 2141539160}
 --- !u!1 &375314428
 GameObject:
   m_ObjectHideFlags: 0
@@ -17050,6 +16911,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   planetPrefab: {fileID: 2617456007389463383, guid: 7e12d234775695d4792cee72407321d7, type: 3}
   bomPlanetPrefab: {fileID: 2617456007389463383, guid: 6120961f2fdf04747906001138a643a2, type: 3}
+  blackholePrefab: {fileID: 2617456007389463383, guid: 5384b5396b137a64dbcffa999786f523, type: 3}
   planetParent: {fileID: 1231715250}
 --- !u!1 &1241139531
 GameObject:
@@ -18041,10 +17903,6 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2141539157}
-  - component: {fileID: 2141539159}
-  - component: {fileID: 2141539158}
-  - component: {fileID: 2141539160}
   - component: {fileID: 1587061314}
   - component: {fileID: 1587061316}
   - component: {fileID: 1587061315}
@@ -19144,6 +19002,7 @@ GameObject:
   - component: {fileID: 2141539157}
   - component: {fileID: 2141539159}
   - component: {fileID: 2141539158}
+  - component: {fileID: 2141539160}
   m_Layer: 5
   m_Name: ResultPanel
   m_TagString: Untagged

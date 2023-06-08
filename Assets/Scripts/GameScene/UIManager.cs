@@ -180,19 +180,19 @@ public class UIManager : MonoBehaviour
             fuleColor.color = fuelEnough;
         }
 
-        if (Input.GetKey(KeyCode.P))
+        if (KeyManager.p.down)
         {
             Pause();
         }
-        if (pause && Input.GetKey(KeyCode.R))
+        if (pause && KeyManager.r.down)
         {
             Resume();
         }
-        if (result && Input.GetKey(KeyCode.C))
+        if (result && KeyManager.c.down)
         {
             Continue();
         }
-        if ((result || pause)&& Input.GetKey(KeyCode.F))
+        if ((result || pause)&& KeyManager.f.down)
         {
             Finish();
         }

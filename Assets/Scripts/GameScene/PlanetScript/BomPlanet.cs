@@ -35,7 +35,7 @@ public class BomPlanet : MonoBehaviour
     {
         if (rocketControl.crash) return;
         float distance = (this.transform.position - rocket.transform.position).magnitude;
-        if(distance <= planet.orbitLevel1)
+        if(distance <= planet.planetRadius * 2)
         {
             timerOn = true;
         }
@@ -45,7 +45,7 @@ public class BomPlanet : MonoBehaviour
         }
         if(bomTimer <= 0)
         {
-            if (distance <= planet.orbitLevel1)
+            if (distance <= planet.planetRadius * 2)
             {
                 rocketControl.resultCauseOfDeath = 4;//Ž€ˆöF¯‚Ì”š”­‚ÉŠª‚«ž‚Ü‚ê‚½B
                 rocketControl.RocketDestroy();
