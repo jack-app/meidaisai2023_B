@@ -399,7 +399,6 @@ public class RocketControl : MonoBehaviour
             {
                 foreach (GameObject planetObject in colList)
                 {
-                    Debug.Log(planetObject);
                     planet = planetObject.GetComponent<Planet>();
                     mass = planet.mass;
                     orbitalRadius = planet.planetRadius * 2;

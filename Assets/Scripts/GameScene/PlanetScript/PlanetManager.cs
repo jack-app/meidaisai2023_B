@@ -21,7 +21,7 @@ public class PlanetManager : MonoBehaviour
         {
             Planet prefab;
             bool blackHole = false;
-            if(minSpawnableRange >= 5000 && random.Next(1000) < 2)
+            if(minSpawnableRange >= 5000 && random.Next(400) < 2)
             {
                 prefab = blackholePrefab;
                 blackHole = true;
