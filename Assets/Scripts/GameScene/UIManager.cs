@@ -99,11 +99,11 @@ public class UIManager : MonoBehaviour
         }
         resultCauseOfDeath.text = causeOfDeathText;
 
-        if(score <= 100)
+        if(score <= 1000)
         {
             resultComment.text = "‚Â‚¢‚Ä‚È‚¢‚Ë";
         }
-        else if(score > 100 && score <= 2000)
+        else if(score > 1000 && score <= 2000)
         {
             resultComment.text = "‰SŽÒŠ½Œ}‚Å‚·";
         }
