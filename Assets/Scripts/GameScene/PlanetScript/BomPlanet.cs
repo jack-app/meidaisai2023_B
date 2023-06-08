@@ -28,6 +28,10 @@ public class BomPlanet : MonoBehaviour
         planetManager = GameObject.Find("PlanetManager").GetComponent<PlanetManager>();
         rocketControl = rocket.GetComponent<RocketControl>();
         planet = GetComponent<Planet>();
+        if(this.transform.lossyScale.x >=299)
+        {
+            bomTimer = bomTimer * 2;
+        }
     }
 
     // Update is called once per frame
