@@ -827,7 +827,6 @@ GameObject:
   - component: {fileID: 259119666}
   - component: {fileID: 259119665}
   - component: {fileID: 259119664}
-  - component: {fileID: 259119663}
   m_Layer: 5
   m_Name: SettingPanel
   m_TagString: Untagged
@@ -835,23 +834,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &259119663
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 259119662}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a1631088fbe04d4d917a93163628f46, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rocketTrajectoryExistGUI: {fileID: 518785690}
-  planetTrajectoryExistGUI: {fileID: 1604543032}
-  visualGravityExistGUI: {fileID: 2147423352}
-  visualOrbitExistGUI: {fileID: 1277196662}
-  autoCameraGUI: {fileID: 902886298}
 --- !u!114 &259119664
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1418,6 +1400,7 @@ GameObject:
   - component: {fileID: 348061092}
   - component: {fileID: 348061091}
   - component: {fileID: 348061093}
+  - component: {fileID: 348061094}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1499,6 +1482,23 @@ MonoBehaviour:
   chargeEndColor:
     serializedVersion: 2
     rgba: 3070296551
+--- !u!114 &348061094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 348061090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a1631088fbe04d4d917a93163628f46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rocketTrajectoryExistGUI: {fileID: 518785690}
+  planetTrajectoryExistGUI: {fileID: 1604543032}
+  visualGravityExistGUI: {fileID: 2147423352}
+  visualOrbitExistGUI: {fileID: 1277196662}
+  autoCameraGUI: {fileID: 902886298}
 --- !u!1 &375314428
 GameObject:
   m_ObjectHideFlags: 0
