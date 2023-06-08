@@ -17,7 +17,6 @@ public class GameManager : MonoBehaviour
     {
         Application.targetFrameRate = 60;
         KeyManager.GetKeyInfo();
-        rocketControl.gameObject.GetComponent<TrailRenderer>().enabled = rocketTrajectoryExist;
         AudioSource[] audioSources = rocketControl.gameObject.GetComponents<AudioSource>();
         gameBgm = audioSources[0];
         rocketMoveAudio = audioSources[1];
@@ -71,6 +70,7 @@ public static class KeyManager
     public static Key r;
     public static Key i;
     public static Key s;
+    public static Key b;
     public static Key lShift;
     public static Key rShift;
 
@@ -83,8 +83,9 @@ public static class KeyManager
         f = new Key() { down = Input.GetKeyDown(KeyCode.F), up = Input.GetKeyUp(KeyCode.F), keep = Input.GetKey(KeyCode.F) };
         p = new Key() { down = Input.GetKeyDown(KeyCode.P), up = Input.GetKeyUp(KeyCode.P), keep = Input.GetKey(KeyCode.P) };
         r = new Key() { down = Input.GetKeyDown(KeyCode.R), up = Input.GetKeyUp(KeyCode.R), keep = Input.GetKey(KeyCode.R) };
-        p = new Key() { down = Input.GetKeyDown(KeyCode.I), up = Input.GetKeyUp(KeyCode.I), keep = Input.GetKey(KeyCode.I) };
-        r = new Key() { down = Input.GetKeyDown(KeyCode.S), up = Input.GetKeyUp(KeyCode.S), keep = Input.GetKey(KeyCode.S) };
+        i = new Key() { down = Input.GetKeyDown(KeyCode.I), up = Input.GetKeyUp(KeyCode.I), keep = Input.GetKey(KeyCode.I) };
+        s = new Key() { down = Input.GetKeyDown(KeyCode.S), up = Input.GetKeyUp(KeyCode.S), keep = Input.GetKey(KeyCode.S) };
+        b = new Key() { down = Input.GetKeyDown(KeyCode.B), up = Input.GetKeyUp(KeyCode.B), keep = Input.GetKey(KeyCode.B) };
         lShift = new Key() { down = Input.GetKeyDown((KeyCode.LeftShift)), up = Input.GetKeyUp((KeyCode.LeftShift)), keep = Input.GetKey((KeyCode.LeftShift)) };
         rShift = new Key() { down = Input.GetKeyDown((KeyCode.RightShift)), up = Input.GetKeyUp((KeyCode.RightShift)), keep = Input.GetKey((KeyCode.RightShift)) };
     }

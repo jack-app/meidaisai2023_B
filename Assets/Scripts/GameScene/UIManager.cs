@@ -186,17 +186,17 @@ public class UIManager : MonoBehaviour
         {
             Pause();
         }
-        if (pause && Input.GetKey(KeyCode.S))
+        if (pause && KeyManager.s.keep)
         {
             setting = true;
             settingPanel.gameObject.SetActive(true);
         }
-        if (setting && Input.GetKey(KeyCode.B))
+        if (setting && KeyManager.b.keep)
         {
             setting = false;
             settingPanel.gameObject.SetActive(false);
         }
-        if (pause && !setting && Input.GetKey(KeyCode.R))
+        if (pause && !setting && KeyManager.r.keep)
         {
             Resume();
         }
@@ -204,7 +204,7 @@ public class UIManager : MonoBehaviour
         {
             Continue();
         }
-        if ((result || pause) && !setting && Input.GetKey(KeyCode.F))
+        if ((result || pause) && !setting && KeyManager.f.keep)
         {
             Finish();
         }
