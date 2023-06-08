@@ -363,6 +363,18 @@ public class RocketControl : MonoBehaviour
         {
             colList.Add(collider.gameObject);
         }
+        if(collider.gameObject.tag == "BlackHole")
+        {
+            resultCauseOfDeath = 5;
+            gameManager.StartGameFinish(resultCauseOfDeath, resultTime, resultMaxSpeed, resultPlanetCount, resultSpCount);
+            crash = true;
+            mainCamera.SetActive(true);
+            subCamera.SetActive(false);
+            this.gameObject.transform.DetachChildren();
+            Destroy(ds);
+            Destroy(this.gameObject);
+            Destroy(this);
+        }
     }
     void OnTriggerExit(Collider collider)
     {
@@ -409,7 +421,7 @@ public class RocketControl : MonoBehaviour
                                                                                     //�Ȃ��p��_�E0����180_��0����-180                          
                                                                                     //Debug.Log(angle);
 
-                        if (angle > 90 && !leftAround && !rightAround) //�����v���
+                        if (angle > 85 && !leftAround && !rightAround) //�����v���
                         {
                             escapeOrbitalRadius = orbitalRadius;
                             relativeRocketPos = -gravityDirection;//�O���̔��a�ƂȂ�x�N�g���̎擾
@@ -427,7 +439,7 @@ public class RocketControl : MonoBehaviour
                             }
                         }
 
-                        if (angle < -90 && !leftAround && !rightAround) //���v���
+                        if (angle < -85 && !leftAround && !rightAround) //���v���
                         {
                             escapeOrbitalRadius = orbitalRadius;
                             relativeRocketPos = -gravityDirection;//�O���̔��a�ƂȂ�x�N�g���̎擾

@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Planet
   - Inside
+  - TrackingObject
+  - Actors
+  - BlackHole
   layers:
   - Default
   - TransparentFX
