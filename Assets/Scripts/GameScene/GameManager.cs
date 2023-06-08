@@ -15,7 +15,6 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        Application.targetFrameRate = 60;
         KeyManager.GetKeyInfo();
         AudioSource[] audioSources = rocketControl.gameObject.GetComponents<AudioSource>();
         gameBgm = audioSources[0];
@@ -24,6 +23,8 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         KeyManager.GetKeyInfo();
+        Debug.Log(KeyManager.space.down.ToString() + ", " + KeyManager.space.keep.ToString() + ", " + KeyManager.space.up);
+        uiManager.KeyCheck();
         if (rocketControl.crash) return;
         score = score > (long)rocketControl.nowPosition.magnitude ? score : (long)rocketControl.nowPosition.magnitude;
         uiManager.UIUpdate(score, rocketControl.FuelAmount(), rocketControl.delta.magnitude, rocketControl.chargePower);
@@ -90,10 +91,11 @@ public static class KeyManager
         b = new Key() { down = Input.GetKeyDown(KeyCode.B), up = Input.GetKeyUp(KeyCode.B), keep = Input.GetKey(KeyCode.B) };
         lShift = new Key() { down = Input.GetKeyDown((KeyCode.LeftShift)), up = Input.GetKeyUp((KeyCode.LeftShift)), keep = Input.GetKey((KeyCode.LeftShift)) };
         rShift = new Key() { down = Input.GetKeyDown((KeyCode.RightShift)), up = Input.GetKeyUp((KeyCode.RightShift)), keep = Input.GetKey((KeyCode.RightShift)) };
+        if (space.down && !space.keep) Debug.Log("down = true, keep = false");
         if (space.keep) preSpaceKeep = true;
         else if (preSpaceKeep) 
         {
-            if (!space.up) Debug.LogWarning("Up is not working");
+            if (!space.up) Debug.Log("Up is not working");
             space.up = true;
             preSpaceKeep = false; 
         }

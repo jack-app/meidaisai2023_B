@@ -24,7 +24,6 @@ public class PlanetManager : MonoBehaviour
             if(minSpawnableRange >= 5000 && random.Next(1000) < 2)
             {
                 prefab = blackholePrefab;
-                Debug.Log("black hole was spawned");
                 blackHole = true;
             }
             else prefab = random.Next(100) <= 30 ? bomPlanetPrefab : planetPrefab;
@@ -39,9 +38,8 @@ public class PlanetManager : MonoBehaviour
     {
         Planet prefab;
         bool blackhole = false;
-        if (minSpawnableRange >= 5000 && random.Next(1000) < 2)
+        if (minSpawnableRange >= 15000 && random.Next(100) < 2)
         {
-            Debug.Log("black hole was spawned");
             prefab = blackholePrefab;
             blackhole = true;
         }
@@ -70,6 +68,7 @@ public class PlanetManager : MonoBehaviour
                 if (randomInt <= Mathf.Pow(minSpawnableRange, 1f / 5f)) spawnCount++;
                 if (randomInt <= Mathf.Pow(minSpawnableRange, 1f / 5.5f)) spawnCount++;
                 if (randomInt <= Mathf.Pow(minSpawnableRange, 1f / 6f)) spawnCount++;
+                if (randomInt <= Mathf.Pow(minSpawnableRange, 1f / 6.5f)) spawnCount++;
                 Spawn(spawnCount);
             }
             else minSpawnableRange++;
