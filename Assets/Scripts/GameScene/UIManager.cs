@@ -180,7 +180,10 @@ public class UIManager : MonoBehaviour
         {
             fuleColor.color = fuelEnough;
         }
+    }
 
+    public void KeyCheck()
+    {
         if (KeyManager.p.down)
         {
             Pause();
