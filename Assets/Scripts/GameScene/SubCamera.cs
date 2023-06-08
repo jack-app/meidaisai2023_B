@@ -46,9 +46,16 @@ public class SubCamera : MonoBehaviour
                 Vector3 planetPos = rc.orbitCenter.transform.position;//惑星の位置
                 Vector3 pToCenterDirection = planetPos * (-1);//惑星からの宇宙中心方向のベクトル
                 Vector3 pNlzDirection = pToCenterDirection.normalized;//単位ベクトル化
-                Vector3 pBackposition = planetPos + (back * pNlzDirection);//カメラの惑星後方位置
-                planetforcasPos = new Vector3(pBackposition.x, up, pBackposition.z);//位置変更の実行
-
+                if(rc.orbitCenter.transform.lossyScale.x < 200)
+                {
+                    Vector3 pBackposition = planetPos + (back * pNlzDirection);//カメラの惑星後方位置
+                    planetforcasPos = new Vector3(pBackposition.x, up, pBackposition.z);//位置変更の実行
+                }
+                else
+                {
+                    Vector3 pBackposition = planetPos + (back * pNlzDirection * 2.45f);//カメラの惑星後方位置
+                    planetforcasPos = new Vector3(pBackposition.x, up * 2.45f, pBackposition.z);//位置変更の実行
+                }
                 float pCenterAngle = Vector3.Angle(planetPos, Vector3.forward);//カメラ角度の決定
                 var pCameraAxis = Vector3.Cross(planetPos, Vector3.forward).y < 0 ? -1 : 1;
                 var pNormalizedAngle = Mathf.Repeat(-pCenterAngle * pCameraAxis, 360);
