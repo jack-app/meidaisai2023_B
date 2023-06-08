@@ -9,6 +9,7 @@ public class MainCamera : MonoBehaviour
     private GameObject obj;
     private RocketControl rc;
     private Vector3 localAngle;
+    private Vector3 worldAngle;
     void Start()
     {
         obj = GameObject.Find("Rocket");

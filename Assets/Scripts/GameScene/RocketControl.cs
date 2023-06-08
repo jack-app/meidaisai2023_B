@@ -30,6 +30,7 @@ public class RocketControl : MonoBehaviour
     [SerializeField] private ParticleSystem rightParticle;
     [SerializeField] private ParticleSystem leftParticle;
     [SerializeField] private ParticleSystem frontParticle;
+    [SerializeField] private MainCamera mainCameraCon;
     public bool autoCamera;
     public bool crash { get; private set; } = false;
     public bool inOrbit = false; // �O���ɏ���Ă邩�̔���
@@ -121,6 +122,7 @@ public class RocketControl : MonoBehaviour
         mainCamera.SetActive(true);
         subCamera.SetActive(false);
         Instantiate(explosionPrefab, this.transform.position, Quaternion.identity);
+        Destroy(mainCameraCon);
         this.gameObject.transform.DetachChildren();
         Destroy(ds);
         Destroy(this.gameObject);

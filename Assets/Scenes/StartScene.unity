@@ -947,7 +947,6 @@ GameObject:
   - component: {fileID: 546387067}
   - component: {fileID: 546387069}
   - component: {fileID: 546387068}
-  - component: {fileID: 546387070}
   m_Layer: 5
   m_Name: SettingPanel
   m_TagString: Untagged
@@ -1025,23 +1024,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 546387066}
   m_CullTransparentMesh: 1
---- !u!114 &546387070
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 546387066}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a1631088fbe04d4d917a93163628f46, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rocketTrajectoryExistGUI: {fileID: 110930545}
-  planetTrajectoryExistGUI: {fileID: 250839195}
-  visualGravityExistGUI: {fileID: 1611308214}
-  visualOrbitExistGUI: {fileID: 224667284}
-  autoCameraGUI: {fileID: 1022613880}
 --- !u!1 &678091132
 GameObject:
   m_ObjectHideFlags: 0
@@ -2406,6 +2388,7 @@ GameObject:
   - component: {fileID: 1194770332}
   - component: {fileID: 1194770331}
   - component: {fileID: 1194770335}
+  - component: {fileID: 1194770336}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -2572,6 +2555,23 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1194770336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1194770330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a1631088fbe04d4d917a93163628f46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rocketTrajectoryExistGUI: {fileID: 110930545}
+  planetTrajectoryExistGUI: {fileID: 250839195}
+  visualGravityExistGUI: {fileID: 1611308214}
+  visualOrbitExistGUI: {fileID: 224667284}
+  autoCameraGUI: {fileID: 1022613880}
 --- !u!1 &1548073236
 GameObject:
   m_ObjectHideFlags: 0
