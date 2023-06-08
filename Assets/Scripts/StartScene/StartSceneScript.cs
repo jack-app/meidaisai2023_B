@@ -7,7 +7,7 @@ public class StartSceneScript : MonoBehaviour
     private bool settingg;
     void Start()
     {
-        Application.targetFrameRate = 60;
+        Application.targetFrameRate = 50;
     }
     void Update()
     {

@@ -63,12 +63,18 @@ public class PlanetManager : MonoBehaviour
                 else Spawn();
                 if (randomInt <= Mathf.Pow(minSpawnableRange, 1f / 2f)) spawnCount++;
                 if (randomInt <= Mathf.Pow(minSpawnableRange, 1f / 3f)) spawnCount++;
+                if (randomInt <= Mathf.Pow(minSpawnableRange, 1f / 3.5f)) spawnCount++;
                 if (randomInt <= Mathf.Pow(minSpawnableRange, 1f / 4f)) spawnCount++;
                 if (randomInt <= Mathf.Pow(minSpawnableRange, 1f / 4.5f)) spawnCount++;
                 if (randomInt <= Mathf.Pow(minSpawnableRange, 1f / 5f)) spawnCount++;
-                if (randomInt <= Mathf.Pow(minSpawnableRange, 1f / 5.5f)) spawnCount++;
+                if (randomInt <= Mathf.Pow(minSpawnableRange, 1f / 5.4f)) spawnCount++;
+                if (randomInt <= Mathf.Pow(minSpawnableRange, 1f / 5.7f)) spawnCount++;
                 if (randomInt <= Mathf.Pow(minSpawnableRange, 1f / 6f)) spawnCount++;
+                if (randomInt <= Mathf.Pow(minSpawnableRange, 1f / 6.3f)) spawnCount++;
                 if (randomInt <= Mathf.Pow(minSpawnableRange, 1f / 6.5f)) spawnCount++;
+                if (randomInt <= Mathf.Pow(minSpawnableRange, 1f / 6.7f)) spawnCount++;
+                if (randomInt <= Mathf.Pow(minSpawnableRange, 1f / 6.9f)) spawnCount++;
+                if (randomInt <= Mathf.Pow(minSpawnableRange, 1f / 7f)) spawnCount++;
                 Spawn(spawnCount);
             }
             else minSpawnableRange++;
