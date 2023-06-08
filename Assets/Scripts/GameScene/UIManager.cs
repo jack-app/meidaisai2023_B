@@ -61,6 +61,8 @@ public class UIManager : MonoBehaviour
 
     public void Result(long score, int CauseOfDeath, float TotalTime, float MaxSpeed, int PlanetCount, int SpCount)
     {
+        pausePanel.gameObject.SetActive(false);
+        pause = false;
         int minutes = (int)TotalTime / 60;
         float seconds = TotalTime - minutes * 60;
         Time.timeScale = 0f;
@@ -196,7 +198,7 @@ public class UIManager : MonoBehaviour
 
     public void KeyCheck()
     {
-        if (KeyManager.p.down)
+        if (KeyManager.p.down && !result)
         {
             Pause();
         }
