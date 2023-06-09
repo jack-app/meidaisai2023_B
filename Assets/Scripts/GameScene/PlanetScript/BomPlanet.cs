@@ -30,7 +30,7 @@ public class BomPlanet : MonoBehaviour
         planet = GetComponent<Planet>();
         if(this.transform.lossyScale.x >=299)
         {
-            bomTimer = bomTimer * 2;
+            bomTimer = bomTimer * 1.5f;
         }
     }
 
