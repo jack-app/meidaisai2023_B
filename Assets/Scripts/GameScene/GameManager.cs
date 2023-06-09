@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         KeyManager.GetKeyInfo();
+        uiManager.UIStart();
         AudioSource[] audioSources = rocketControl.gameObject.GetComponents<AudioSource>();
         gameBgm = audioSources[0];
         rocketMoveAudio = audioSources[1];
@@ -23,7 +24,6 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         KeyManager.GetKeyInfo();
-        Debug.Log(KeyManager.space.down.ToString() + ", " + KeyManager.space.keep.ToString() + ", " + KeyManager.space.up);
         uiManager.KeyCheck();
         if (rocketControl.crash) return;
         score = score > (long)rocketControl.nowPosition.magnitude ? score : (long)rocketControl.nowPosition.magnitude;

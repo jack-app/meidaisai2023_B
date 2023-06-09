@@ -28,10 +28,17 @@ public class UIManager : MonoBehaviour
     [SerializeField] Color32 fuelLess = new Color32(255, 255, 255, 255);
     [SerializeField] Color32 chargeStartColor = new Color32(255, 255, 255, 255);
     [SerializeField] Color32 chargeEndColor = new Color32(255, 255, 255, 255);
+    [SerializeField] private GameObject sceneChangePanel;
+    [SerializeField] private AudioSource BGMSource;
+    private Image fadeAlpha;
     private string causeOfDeathText;
     private bool pause = false;
     private bool result = false;
     private bool setting = false;
+    private bool fadeinFlag = true;
+    private bool fadeoutFlag = false;
+    private float alpha = 2.0f;
+    private string nextScene = "StartScene";
 
     private void Pause()
     {
@@ -49,14 +56,14 @@ public class UIManager : MonoBehaviour
 
     private void Continue()
     {
-        Time.timeScale = 1f;
-        SceneManager.LoadScene("GameScene");
+        nextScene = "GameScene";
+        fadeoutFlag = true;
     }
 
     private void Finish()
     {
-        Time.timeScale = 1f;
-        SceneManager.LoadScene("StartScene");
+        nextScene = "StartScene";
+        fadeoutFlag = true;
     }
 
     public void Result(long score, int CauseOfDeath, float TotalTime, float MaxSpeed, int PlanetCount, int SpCount)
@@ -169,6 +176,40 @@ public class UIManager : MonoBehaviour
         result = true;
     }
 
+    private void Fade()
+    {
+        if (fadeinFlag)
+        {
+            alpha -= 0.02f;
+            if (alpha <= 0)
+            {
+                fadeinFlag = false;
+                alpha = 0;
+            }
+            fadeAlpha.color = new Color(0, 0, 0, alpha);
+        }
+        else if (fadeoutFlag)
+        {
+
+            alpha += 0.02f;
+            if (alpha >= 1)
+            {
+                Time.timeScale = 1.0f;
+                SceneManager.LoadScene(nextScene);
+                fadeoutFlag = false;
+                alpha = 1;
+            }
+            BGMSource.volume = BGMSource.volume - 0.02f;
+            fadeAlpha.color = new Color(0, 0, 0, alpha);
+        }
+    }
+
+    public void UIStart()
+    {
+        fadeAlpha = sceneChangePanel.GetComponent<Image>();
+        alpha = fadeAlpha.color.a;
+    }
+
     public void UIUpdate(long score, float fuel, float speed, float charge)
     {
         fuelSlider.value = fuel;
@@ -198,6 +239,7 @@ public class UIManager : MonoBehaviour
 
     public void KeyCheck()
     {
+        Fade();
         if (KeyManager.p.down && !result)
         {
             Pause();

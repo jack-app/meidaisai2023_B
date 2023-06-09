@@ -1,6 +1,4 @@
 using UnityEngine;
-using System.Collections;
-using UnityEngine.Windows.WebCam;
 using System;
 
 [RequireComponent (typeof (Detonator))]
