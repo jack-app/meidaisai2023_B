@@ -186,7 +186,7 @@ public class UIManager : MonoBehaviour
             ChargeSliderLImg.color = chargeStartColor;
             ChargeSliderRImg.color = chargeStartColor;
         }
-        if(fuel <= 20)
+        if(fuel <= 15)
         {
             fuleColor.color = fuelLess;
         }
